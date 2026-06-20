@@ -1,0 +1,77 @@
+/* Header Layout */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 20px;
+}
+
+.welcome-banner h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #1a1a1a;
+}
+
+.welcome-banner p {
+    margin: 5px 0 0 0;
+    color: #666;
+}
+
+/* Filter Styles */
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
+
+.select-wrapper:hover {
+    border-color: #7c3aed;
+}
+
+.calendar-icon {
+    color: #7c3aed;
+    margin-right: 8px;
+}
+
+.time-select {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-container {
+        width: 100%;
+    }
+
+    .select-wrapper {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .time-select {
+        flex-grow: 1;
+    }
+}

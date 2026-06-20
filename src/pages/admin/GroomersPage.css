@@ -1,0 +1,199 @@
+/* Premium Color Palette 
+   Gold: #D4AF37 (Metallic Gold)
+   Soft White: #FFFFFF
+   Light Gray: #F9F9F9
+   Text: #2C2C2C
+*/
+
+.groomers-page-container {
+    padding: 40px 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background-color: #fcfcfc;
+    min-height: 100vh;
+}
+
+.premium-title {
+    color: #2c2c2c;
+    margin-bottom: 35px;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+/* Elegant Golden underline */
+.premium-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #D4AF37, #F1D37E);
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+/* Table Card Styling */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.groomer-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+/* Header Styling */
+.groomer-table thead {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    color: #D4AF37;
+}
+
+.groomer-table th {
+    padding: 18px 15px;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.groomer-table td {
+    padding: 16px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+    font-size: 14px;
+}
+
+.groomer-table tbody tr:hover {
+    background-color: rgba(212, 175, 55, 0.03);
+    transition: background 0.3s ease;
+}
+
+/* Status Indicators */
+.status-text {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-approved { 
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-unapproved { 
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+/* Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-view {
+    background-color: #ffffff;
+    color: #D4AF37;
+    border: 1px solid #D4AF37;
+}
+
+.btn-view:hover {
+    background-color: #D4AF37;
+    color: white;
+}
+
+.btn-approve {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    color: white;
+}
+
+.btn-unapprove {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+/* --- MOBILE RESPONSIVENESS (Card View) --- */
+@media screen and (max-width: 992px) {
+    .groomer-table, .groomer-table thead, .groomer-table tbody, .groomer-table th, .groomer-table td, .groomer-table tr { 
+        display: block; 
+    }
+
+    .groomer-table thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .groomer-table tr {
+        border: 1px solid #eee;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        padding: 15px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .groomer-table td { 
+        border: none;
+        position: relative;
+        padding-left: 45%; 
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: right;
+        border-bottom: 1px solid #fafafa;
+    }
+
+    .groomer-table td:last-child {
+        border-bottom: none;
+    }
+
+    .groomer-table td:before { 
+        position: absolute;
+        left: 15px;
+        width: 40%; 
+        text-align: left;
+        font-weight: 700;
+        color: #D4AF37;
+        content: attr(data-label);
+        text-transform: uppercase;
+        font-size: 11px;
+    }
+
+    .action-buttons {
+        justify-content: flex-end;
+        padding-top: 15px;
+    }
+}

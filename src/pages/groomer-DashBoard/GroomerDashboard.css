@@ -1,0 +1,252 @@
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --bg-body: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --sidebar-width: 260px;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR STYLES */
+.sidebar {
+  width: var(--sidebar-width);
+  background: #1e293b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.logo-icon {
+  background: var(--primary);
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+
+.close-menu {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.nav-links li {
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: 0.2s;
+}
+
+.nav-links li:hover, .nav-links li.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.user-profile img {
+  width: 45px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+}
+
+/* STAT CARDS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.stat-icon {
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+}
+
+.purple { background: #6366f1; }
+.green { background: #10b981; }
+.orange { background: #f59e0b; }
+
+.stat-info h3 {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.stat-info p {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* TABLE STYLES */
+.table-container {
+  background: var(--bg-card);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.view-all {
+  color: var(--primary);
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.responsive-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  padding: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 600;
+}
+
+td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.status-badge.paid { background: #dcfce7; color: #166534; }
+.status-badge.pending { background: #fef9c3; color: #854d0e; }
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    height: 100vh;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+
+  .close-menu, .menu-toggle {
+    display: block;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .top-bar h1 {
+    font-size: 1.2rem;
+  }
+}

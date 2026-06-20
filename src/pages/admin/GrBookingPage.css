@@ -1,0 +1,230 @@
+/* --- Global Styles --- */
+:root {
+    --primary-color: #2c3e50; /* Dark Blue/Grey for main text */
+    --accent-color: #3498db; /* Blue for highlights */
+    --background-color: #ecf0f1; /* Light grey background */
+    --card-background: #ffffff; /* White card/table background */
+    --border-color: #dcdde1; /* Light border */
+}
+
+.gr-container {
+    padding: 30px;
+    background-color: var(--background-color);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Header --- */
+.gr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.gr-title {
+    color: var(--primary-color);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.gr-title svg {
+    margin-right: 10px;
+    color: var(--accent-color);
+}
+
+.gr-count {
+    color: var(--primary-color);
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* --- Table Styles (Desktop First) --- */
+.gr-table-wrapper {
+    overflow-x: auto;
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.gr-booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px; /* Ensures horizontal scroll on smaller screens */
+}
+
+.gr-booking-table thead th {
+    background-color: #f7f9fb; /* Very light grey header */
+    color: var(--primary-color);
+    text-align: left;
+    padding: 15px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.gr-booking-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.gr-booking-table tbody tr:hover {
+    background-color: #eaf4fd; /* Light blue hover */
+}
+
+.gr-booking-table tbody td {
+    padding: 15px 20px;
+    color: var(--primary-color);
+    font-size: 15px;
+}
+
+/* --- Cell Content Styling --- */
+.main-text {
+    margin: 0;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.sub-text {
+    margin: 0;
+    font-size: 13px;
+    color: #7f8c8d; /* Muted grey */
+}
+
+.id-text {
+    display: block;
+    font-weight: 600;
+}
+
+.date-text {
+    display: block;
+    font-size: 12px;
+    color: #95a5a6;
+}
+
+.amount-cell {
+    font-weight: 700;
+    color: #27ae60; /* Green for money */
+    font-size: 16px;
+}
+
+/* Status Badge Alignment in table cell */
+.gr-booking-table tbody td:last-child span {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* --- Empty / Loading States --- */
+.no-bookings, .loading-state p {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.table-note {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+/* --------------------------------------
+ * --- Mobile Responsiveness (LESS THAN 768px) ---
+ * -------------------------------------- */
+@media screen and (max-width: 768px) {
+    .gr-container {
+        padding: 15px;
+    }
+
+    .gr-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .gr-title {
+        font-size: 24px;
+    }
+
+    .gr-table-wrapper {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Hide table header on mobile view */
+    .gr-booking-table thead {
+        display: none;
+    }
+    
+    .gr-booking-table tbody tr {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+    }
+
+    .gr-booking-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        padding: 10px 15px;
+        border-bottom: 1px dashed var(--border-color);
+    }
+
+    .gr-booking-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    /* Use data-label to show the column name */
+    .gr-booking-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #7f8c8d;
+        flex: 1;
+        text-align: left;
+        font-size: 13px;
+    }
+
+    /* Override the ID/Date cell layout for better display */
+    .gr-booking-table tbody tr td:first-child {
+        display: block;
+        text-align: left;
+        border-radius: 8px 8px 0 0;
+        background-color: #f7f9fb;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .gr-booking-table tbody tr td:first-child::before {
+        content: "BOOKING ID";
+    }
+
+    /* Status badge alignment fix for mobile */
+    .gr-booking-table tbody td:last-child {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .gr-booking-table tbody td:last-child span {
+        width: fit-content;
+    }
+}

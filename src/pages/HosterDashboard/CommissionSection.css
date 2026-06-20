@@ -1,0 +1,227 @@
+/* COLORS USED:
+   Gold Primary: #D4AF37
+   Gold Dark: #996515
+   Dark BG: #1a1a1a
+   Card BG: #ffffff
+*/
+
+.commission-container {
+    font-family: 'Inter', sans-serif;
+    padding: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* Summary Grid - Responsive */
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first */
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 768px) {
+    .summary-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.summary-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    border-bottom: 4px solid #D4AF37;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-label {
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.card-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.highlight-profit .card-value {
+    color: #2d6a4f;
+}
+
+.highlight-pending .card-value {
+    color: #bc4749;
+}
+
+/* Pay Button Stylings */
+.pay-button {
+    width: 100%;
+    background: linear-gradient(135deg, #D4AF37 0%, #996515 100%);
+    color: white;
+    font-weight: 700;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
+}
+
+.pay-button:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.all-settled {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #D4AF37;
+    font-weight: bold;
+}
+
+.crown-icon {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+/* Booking List Styles */
+.list-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #996515;
+}
+
+.booking-card {
+    background: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column; /* Mobile stack */
+    gap: 15px;
+    transition: all 0.2s ease;
+}
+
+
+@media (min-width: 640px) {
+    .booking-card {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.booking-card:hover {
+    border-color: #D4AF37;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.card-left {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.dog-icon-wrapper {
+    background: #fff9e6;
+    color: #D4AF37;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.4rem;
+}
+
+.booking-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #1a1a1a;
+}
+
+.guest-name {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 4px 0;
+}
+
+.payment-tag {
+    font-size: 0.75rem;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #444;
+}
+
+.card-right {
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 15px;
+}
+
+@media (min-width: 640px) {
+    .card-right {
+        text-align: right;
+        flex-direction: column;
+        border-top: none;
+        padding-top: 0;
+    }
+}
+
+.profit-text { color: #2d6a4f; font-weight: 600; font-size: 0.95rem; }
+.commission-text { color: #bc4749; font-weight: 600; font-size: 0.95rem; }
+
+.details-button {
+    background: transparent;
+    border: 1px solid #D4AF37;
+    color: #996515;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.details-button:hover {
+    background: #D4AF37;
+    color: white;
+}
+
+/* Loading Spinner */
+.loader-container {
+    text-align: center;
+    padding: 50px;
+    color: #996515;
+}
+
+.gold-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #D4AF37;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

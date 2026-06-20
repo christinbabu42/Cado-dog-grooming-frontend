@@ -1,0 +1,166 @@
+/* ============================
+   PREMIUM GOLDEN THEME
+   ============================ */
+
+.user-profile-container {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    min-height: 100vh;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Global text color */
+.user-profile-container * {
+    color: #1c1c1c;
+}
+
+/* Page padding */
+.user-profile-wrapper {
+    padding: 40px 60px;
+}
+
+/* ============================
+   CARD (Luxury feel)
+   ============================ */
+.user-profile-card {
+    background: linear-gradient(145deg, #ffffff, #fbf7ef);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(201, 162, 77, 0.15);
+    margin-bottom: 30px;
+    padding: 32px;
+    border: 1px solid rgba(201, 162, 77, 0.25);
+}
+
+/* ============================
+   HEADER
+   ============================ */
+.user-profile-header {
+    font-size: 36px;
+    font-weight: 700;
+    color: #9e7c19;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+/* ============================
+   PROFILE IMAGE
+   ============================ */
+.user-profile-pic {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #c9a24d;
+    box-shadow: 0 0 0 6px rgba(201, 162, 77, 0.15);
+}
+
+/* ============================
+   INPUTS
+   ============================ */
+.user-profile-input {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0 18px 0;
+    border-radius: 8px;
+    border: 1px solid #d6c38a;
+    font-size: 14px;
+    background: #fff;
+    color: #000;
+}
+
+.user-profile-input:focus {
+    outline: none;
+    border-color: #c9a24d;
+    box-shadow: 0 0 0 3px rgba(201, 162, 77, 0.25);
+}
+
+/* ============================
+   BUTTONS – GOLDEN
+   ============================ */
+.user-profile-btn-primary {
+    background: linear-gradient(135deg, #c9a24d, #9e7c19);
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-profile-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(201, 162, 77, 0.4);
+}
+
+.user-profile-btn-success {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: #fff !important;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 700;
+}
+
+.user-profile-btn-secondary {
+    background: #e0e0e0;
+    color: #333 !important;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+}
+
+/* ============================
+   GPS BUTTON
+   ============================ */
+.user-profile-gps-btn {
+    background: #f6e6b4;
+    color: #6b4e00;
+    border: 1px solid #c9a24d;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ============================
+   TEXT & INFO
+   ============================ */
+.user-profile-grid-responsive p {
+    font-size: 14px;
+}
+
+.user-profile-grid-responsive strong {
+    color: #9e7c19;
+}
+
+/* ============================
+   BOOKING ITEM
+   ============================ */
+.user-profile-booking-item {
+    padding: 18px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ============================
+   MOBILE
+   ============================ */
+@media (max-width: 768px) {
+    .user-profile-wrapper {
+        padding: 20px;
+    }
+
+    .user-profile-flex-responsive {
+        flex-direction: column !important;
+    }
+
+    .user-profile-grid-responsive {
+        grid-template-columns: 1fr !important;
+    }
+}

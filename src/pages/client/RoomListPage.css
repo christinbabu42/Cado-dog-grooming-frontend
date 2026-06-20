@@ -1,0 +1,290 @@
+/* --- Root Styles --- */
+.roomlist-root {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7; /* OYO_BG_LIGHT */
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+/* --- Header --- */
+.roomlist-header {
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column; /* keep column for mobile */
+    align-items: flex-start; /* align left */
+    padding: 10px 40px;
+    gap: 0; /* remove extra gap */
+}
+
+.roomlist-header .header-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roomlist-header a.home-link,
+.roomlist-header h1 {
+    margin: 0; /* remove default margin */
+    padding: 0;
+}
+
+
+.roomlist-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #484848; /* OYO_ACCENT_TEXT */
+}
+
+.roomlist-header p.result-count {
+    color: #6c757d;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Search Input inside header */
+.roomlist-header .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 0 20px;
+    width: 500px;
+    height: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.roomlist-header .search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 15px;
+}
+
+/* --- Filter Sidebar --- */
+.roomlist-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+}
+
+.roomlist-sidebar .filter-box {
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.roomlist-sidebar h4 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.roomlist-sidebar input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+    accent-color: #ff385c; /* OYO_PRIMARY */
+}
+
+.roomlist-sidebar button.reset-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- Room List Container --- */
+.roomlist-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* --- Room Card --- */
+.room-card {
+    display: flex;
+    border-radius: 12px;
+    margin: 15px 0;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    background-color: white;
+    overflow: hidden;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.room-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-card .room-info {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.room-card h3 {
+    margin: 0 0 5px 0;
+    color: #484848; /* OYO_ACCENT_TEXT */
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.room-card .approved-badge {
+    color: #28a745;
+    font-weight: bold;
+    background-color: #e9f7ef;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.room-card p.address {
+    margin: 0 0 15px 0;
+    color: #999;
+    font-size: 14px;
+}
+
+.room-card .rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.room-card .rating span.rating-value {
+    background-color: #28a745; /* OYO_RATING_GREEN */
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.room-card .rating span.rating-text {
+    color: #484848; /* OYO_ACCENT_TEXT */
+    font-weight: 600;
+}
+
+/* --- Price Section --- */
+.room-card .room-price {
+    width: 180px;
+    text-align: right;
+    padding: 20px;
+    border-left: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.room-card .room-price span.old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 14px;
+}
+
+.room-card .room-price h4.new-price {
+    margin: 0;
+    font-size: 26px;
+    color: #ff385c; /* OYO_PRIMARY */
+    font-weight: bold;
+}
+
+.room-card .room-price p.per-day {
+    margin: 0;
+    font-size: 12px;
+    color: #999;
+}
+
+.room-card .room-price button {
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.room-card .room-price button.view-btn {
+    background-color: #ff385c; /* OYO_PRIMARY */
+}
+
+.room-card .room-price button.book-btn {
+    background-color: #007bff; /* OYO_SECONDARY */
+}
+.filter-sticky-wrapper {
+  position: fixed;
+  top: 145px;
+  left: calc(50% - 700px);
+
+  width: 280px;
+  height: 10cm;
+
+  /* Premium gold gradient */
+  background: linear-gradient(
+    180deg,
+    #fffaf0 0%,
+    #fff3d4 40%,
+    #f7e1a0 100%
+  );
+
+  color: #3a2a00; /* deep luxury brown-gold text */
+
+  padding: 20px;
+  border-radius: 14px;
+  overflow-y: auto;
+
+  /* Luxury shadow + subtle gold border */
+  box-shadow:
+    0 8px 24px rgba(180, 140, 40, 0.25),
+    inset 0 0 0 1px rgba(212, 175, 55, 0.6);
+
+  z-index: 900;
+}
+
+
+
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .room-card {
+        flex-direction: column;
+    }
+
+    .room-card .room-price {
+        width: 100%;
+        text-align: center;
+        border-left: none;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 15px 20px;
+    }
+
+    .roomlist-header h1 {
+        font-size: 20px;
+    }
+
+    .roomlist-header .search-bar {
+        width: 100%;
+    }
+
+    .roomlist-sidebar {
+        display: none;
+    }
+    
+}
