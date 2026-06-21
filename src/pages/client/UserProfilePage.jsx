@@ -88,7 +88,7 @@ const UserProfilePage = () => {
 
     const fetchUserData = () => {
         const token = localStorage.getItem("authToken");
-        axios.get("http://localhost:5000/api/user/me", {
+        axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {
@@ -107,7 +107,7 @@ const UserProfilePage = () => {
         setIsUpdating(true);
         try {
             const token = localStorage.getItem("authToken");
-            await axios.put("http://localhost:5000/api/user/update", editData, {
+            await axios.put("https://cado-dog-grooming-backend.onrender.com/api/user/update", editData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUser(editData);
@@ -132,7 +132,7 @@ const UserProfilePage = () => {
                 try {
                     const token = localStorage.getItem("authToken");
                     await axios.put(
-                        "http://localhost:5000/api/user/location",
+                        "https://cado-dog-grooming-backend.onrender.com/api/user/location",
                         {
                             lat: pos.coords.latitude,
                             lng: pos.coords.longitude,

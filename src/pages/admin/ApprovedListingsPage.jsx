@@ -11,7 +11,7 @@ const ApprovedListingsPage = ({ isMobile }) => {
   useEffect(() => {
     const fetchApproved = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/admin/dogstay/approved");
+        const response = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/approved");
 
         if (response.data.success) {
           setApprovedListings(response.data.listings);
@@ -108,7 +108,7 @@ const ApprovedListingsPage = ({ isMobile }) => {
                   {listing.photos.slice(0, 3).map((photo, i) => (
                     <img
                       key={i}
-                      src={`http://localhost:5000/${photo}`}
+                      src={`https://cado-dog-grooming-backend.onrender.com/${photo}`}
                       alt={`Listing ${i + 1}`}
                       style={{
                         width: "100px",
@@ -117,7 +117,7 @@ const ApprovedListingsPage = ({ isMobile }) => {
                         objectFit: "cover",
                         cursor: "pointer",
                       }}
-                      onClick={() => window.open(`http://localhost:5000/${photo}`, "_blank")}
+                      onClick={() => window.open(`https://cado-dog-grooming-backend.onrender.com/${photo}`, "_blank")}
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/100?text=Image+Error";
                       }}

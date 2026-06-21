@@ -17,7 +17,7 @@ const CommissionSection = ({ hostId, onViewBooking }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/host/commission/razorpay-key")
+      .get("https://cado-dog-grooming-backend.onrender.com/api/host/commission/razorpay-key")
       .then(res => setRazorpayKey(res.data.key));
   }, []);
 
@@ -35,7 +35,7 @@ const CommissionSection = ({ hostId, onViewBooking }) => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:5000/api/host/commission/${hostId}`
+          `https://cado-dog-grooming-backend.onrender.com/api/host/commission/${hostId}`
         );
 
         if (res.data?.success) {
@@ -85,7 +85,7 @@ const CommissionSection = ({ hostId, onViewBooking }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/host/commission/create-order",
+        "https://cado-dog-grooming-backend.onrender.com/api/host/commission/create-order",
         { amount, hostId }
       );
 
@@ -102,7 +102,7 @@ const CommissionSection = ({ hostId, onViewBooking }) => {
         order_id: order.id,
         handler: async function (response) {
           await axios.post(
-            "http://localhost:5000/api/host/commission/verify",
+            "https://cado-dog-grooming-backend.onrender.com/api/host/commission/verify",
             { ...response, hostId }
           );
 

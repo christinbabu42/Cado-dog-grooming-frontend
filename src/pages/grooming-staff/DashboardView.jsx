@@ -18,7 +18,7 @@ const DashboardView = ({ staffProfile, earnings: initialEarnings }) => {
         const token = localStorage.getItem("authToken");
         // API call includes the range parameter to filter data on the backend
         const { data } = await axios.get(
-          `http://localhost:5000/api/groomer/staff/earnings/${staffProfile._id}?range=${timeRange}`,
+          `https://cado-dog-grooming-backend.onrender.com/api/groomer/staff/earnings/${staffProfile._id}?range=${timeRange}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

@@ -11,7 +11,7 @@ const ReviewsSection = () => {
   const [responseText, setResponseText] = useState("");
 
   const hostId = localStorage.getItem("hostId");
-  const BACKEND_BASE_URL = "http://localhost:5000/";
+  const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com/";
 
   useEffect(() => {
     const fetchReviews = async () => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { OYO_PRIMARY, OYO_SECONDARY, BOX_STYLE, CARD_BG } from "./Constants.jsx";
 import axios from "axios";
 
-const BACKEND_BASE_URL = "http://localhost:5000"; // adjust when needed
+const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com"; // adjust when needed
 
 // --- PREMIUM THEME CONSTANTS ---
 const GOLD_PRIMARY = "#D4AF37";

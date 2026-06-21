@@ -76,7 +76,7 @@ style={{
                 overflow: 'hidden'
             }}>
                 <img 
-                    src={room.photos && room.photos.length > 0 ? `http://localhost:5000/${room.photos[0]}` : 'https://via.placeholder.com/400x300?text=Dog+Stay+Hotel'} 
+                    src={room.photos && room.photos.length > 0 ? `https://cado-dog-grooming-backend.onrender.com/${room.photos[0]}` : 'https://via.placeholder.com/400x300?text=Dog+Stay+Hotel'} 
                     alt={room.roomName} 
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
@@ -310,7 +310,7 @@ const RoomListPage = () => {
     useEffect(() => {
         const fetchRooms = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/admin/dogstay/approved');
+                const res = await fetch('https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/approved');
                 const data = await res.json();
                 if (data.success) setRoomList(data.listings);
             } catch (err) {

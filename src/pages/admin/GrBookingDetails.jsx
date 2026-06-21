@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./GrBookingDetails.css"; // We will define this below for a premium feel
 
-const BACKEND_BASE_URL = "http://localhost:5000";
+const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com";
 
 const GrBookingDetails = ({ isMobile }) => {
   const { id } = useParams();

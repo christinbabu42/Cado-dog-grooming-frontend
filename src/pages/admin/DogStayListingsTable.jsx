@@ -22,7 +22,7 @@ const DogStayListingsTable = ({ isMobile, onSelectListing, refetchTrigger }) => 
     const fetchListings = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:5000/api/admin/dogstay');
+            const response = await axios.get('https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay');
             if (response.data.success) {
                 setListings(response.data.data);
                 setFilteredListings(response.data.data);
@@ -47,7 +47,7 @@ const DogStayListingsTable = ({ isMobile, onSelectListing, refetchTrigger }) => 
         e.stopPropagation();
         if (!window.confirm(`Delete listing ${id.slice(-4)}?`)) return;
         try {
-            await axios.delete(`http://localhost:5000/api/admin/dogstay/${id}`);
+            await axios.delete(`https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/${id}`);
             setListings(prev => prev.filter(l => l._id !== id));
             setFilteredListings(prev => prev.filter(l => l._id !== id));
             alert('Listing deleted successfully.');
@@ -72,7 +72,7 @@ const DogStayListingsTable = ({ isMobile, onSelectListing, refetchTrigger }) => 
     // SAVE EDIT
     const saveEdit = async (id) => {
         try {
-            const response = await axios.put(`http://localhost:5000/api/admin/dogstay/dogstay/${id}`, editData);
+            const response = await axios.put(`https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/dogstay/${id}`, editData);
             if (response.data.success) {
                 setListings(prev => prev.map(l => l._id === id ? response.data.listing : l));
                 setFilteredListings(prev => prev.map(l => l._id === id ? response.data.listing : l));

@@ -13,7 +13,7 @@ const GOLD_LIGHT = '#F9F4E8';   // Soft Creamy Gold Background
 const TEXT_BLACK = '#000000';   // Pure Black Text
 const CARD_BG = '#ffffff';
 const BOX_STYLE = { boxSizing: 'border-box' };
-const BACKEND_BASE_URL = 'http://localhost:5000';
+const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
 
 // --- Helper Components ---
 const RatingBadge = ({ rating, count }) => (

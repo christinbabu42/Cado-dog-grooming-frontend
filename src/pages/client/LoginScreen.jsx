@@ -52,7 +52,7 @@ useEffect(() => {
     window.history.replaceState({}, document.title, "/login");
 
     // ⭐ Fetch logged-in user's details using axios
-    axios.get("http://localhost:5000/api/user/me", {
+    axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -109,7 +109,7 @@ useEffect(() => {
         console.log("➡ Redirecting to backend /auth/google");
 
         setTimeout(() => {
-            window.location.href = "http://localhost:5000/auth/google";
+            window.location.href = "https://cado-dog-grooming-backend.onrender.com/auth/google";
         }, 800);
     };
 

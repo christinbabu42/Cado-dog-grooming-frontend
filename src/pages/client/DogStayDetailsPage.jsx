@@ -16,7 +16,7 @@ const OYO_BG_LIGHT = '#faf9f6';  // Ivory White
 const CARD_BG = '#ffffff';
 const GOLD_ACCENT_LIGHT = '#fdf8e6';
 const BOX_STYLE = { boxSizing: 'border-box' };
-const BACKEND_BASE_URL = 'http://localhost:5000/';
+const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com/';
 
 // --- STYLES Object ---
 const STYLES = {

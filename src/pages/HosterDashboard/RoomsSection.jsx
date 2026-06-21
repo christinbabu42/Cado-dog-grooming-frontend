@@ -31,7 +31,7 @@ const HostRoomsManagement = () => {
         }
 
         const res = await axios.get(
-          `http://localhost:5000/api/rooms/host/${hostId}`
+          `https://cado-dog-grooming-backend.onrender.com/api/rooms/host/${hostId}`
         );
 
         if (res.data.success) {

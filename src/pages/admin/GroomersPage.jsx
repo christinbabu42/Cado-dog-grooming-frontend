@@ -9,7 +9,7 @@ const GroomersPage = () => {
 
   const fetchGroomers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/grooming-staff");
+      const res = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/grooming-staff");
       if (res.data.success) {
         setGroomers(res.data.data);
       } else {
@@ -31,7 +31,7 @@ const GroomersPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this groomer?")) return;
     try {
-      const res = await axios.delete(`http://localhost:5000/api/grooming-staff/${id}`);
+      const res = await axios.delete(`https://cado-dog-grooming-backend.onrender.com/api/grooming-staff/${id}`);
       if (res.data.success) {
         alert("Groomer deleted successfully!");
         fetchGroomers();
@@ -46,7 +46,7 @@ const GroomersPage = () => {
 
   const handleApproval = async (id, currentStatus) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/grooming-staff/${id}`, {
+      const res = await axios.put(`https://cado-dog-grooming-backend.onrender.com/api/grooming-staff/${id}`, {
         isApproved: !currentStatus,
       });
       if (res.data.success) {

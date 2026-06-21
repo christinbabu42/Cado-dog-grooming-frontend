@@ -7,7 +7,7 @@ const OYO_SECONDARY = '#484848';
 const OYO_BG_LIGHT = '#f7f7f7';
 const CARD_BG = '#ffffff';
 const BOX_STYLE = { boxSizing: 'border-box' };
-const BACKEND_BASE_URL = 'http://localhost:5000';
+const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
 
 // Format date
 const formatDate = (dateString) => {

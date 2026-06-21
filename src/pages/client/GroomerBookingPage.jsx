@@ -94,7 +94,7 @@ const showAlert = (title, text, icon = 'success') => {
     // DATA FETCHING
     const fetchStaff = async (id) => {
       try { 
-        const { data } = await axios.get(`http://localhost:5000/api/groomer/${id}`); 
+        const { data } = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/groomer/${id}`); 
         if (data.success) setStaffInfo(data.staff); 
       } 
       catch (err) { console.error("Failed to fetch staff info:", err); }
@@ -103,7 +103,7 @@ const showAlert = (title, text, icon = 'success') => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const { data } = await axios.get("http://localhost:5000/api/user/me", { headers: { Authorization: `Bearer ${token}` } });
+        const { data } = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", { headers: { Authorization: `Bearer ${token}` } });
         if (data) {
           setForm(prev => ({
             ...prev,
@@ -127,7 +127,7 @@ const showAlert = (title, text, icon = 'success') => {
         const totalServicePrice = form.price * petCount;
         
         const { data } = await axios.post(
-          "http://localhost:5000/api/groomer/calculate-travel",
+          "https://cado-dog-grooming-backend.onrender.com/api/groomer/calculate-travel",
           { staffID: selectedStaffID, servicePrice: totalServicePrice, userLat: form.lat, userLng: form.lng },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -179,7 +179,7 @@ const showAlert = (title, text, icon = 'success') => {
       setSavingLocation(true);
       try {
         const token = localStorage.getItem("authToken");
-        await axios.put("http://localhost:5000/api/user/location", { address: form.address, lat: form.lat, lng: form.lng }, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put("https://cado-dog-grooming-backend.onrender.com/api/user/location", { address: form.address, lat: form.lat, lng: form.lng }, { headers: { Authorization: `Bearer ${token}` } });
         showAlert("Address Saved", "Your service location is now locked in. ✅");
         setIsEditAddress(false);
         calculateTravel();
@@ -218,7 +218,7 @@ const showAlert = (title, text, icon = 'success') => {
       try {
         const token = localStorage.getItem("authToken");
         const { data } = await axios.post(
-          "http://localhost:5000/api/groomer/create-order",
+          "https://cado-dog-grooming-backend.onrender.com/api/groomer/create-order",
           { finalAmount: distanceInfo.finalAmount },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -232,7 +232,7 @@ const showAlert = (title, text, icon = 'success') => {
           handler: async function (res) {
             try {
               await axios.post(
-                "http://localhost:5000/api/groomer/verify-payment",
+                "https://cado-dog-grooming-backend.onrender.com/api/groomer/verify-payment",
                 { 
                   razorpay_payment_id: res.razorpay_payment_id, 
                   razorpay_order_id: res.razorpay_order_id, 
@@ -260,7 +260,7 @@ const showAlert = (title, text, icon = 'success') => {
     const handleCashPayment = async () => {
       if (!validateForm()) return; 
       try {
-        await axios.post("http://localhost:5000/api/groomer/cash-payment", getBookingPayload());
+        await axios.post("https://cado-dog-grooming-backend.onrender.com/api/groomer/cash-payment", getBookingPayload());
         showAlert("Booking Successful!", `Order placed for ₹${distanceInfo.finalAmount}. Please pay the groomer in cash.`);
         resetForm();
       } catch (err) { showAlert("Error", "Cash booking failed. Please try online payment.", "error"); }

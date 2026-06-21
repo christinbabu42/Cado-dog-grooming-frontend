@@ -20,7 +20,7 @@ const CommissionPage = ({ isMobile }) => {
 
     const fetchCommissions = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/api/admin/commissions");
+            const res = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/admin/commissions");
             setData(res.data);
         } catch (err) {
             console.error("Commission load failed", err);

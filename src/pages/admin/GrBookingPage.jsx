@@ -35,7 +35,7 @@ const GrBookingPage = ({ isMobile }) => {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/admin/groomer/all-bookings");
+                const res = await fetch("https://cado-dog-grooming-backend.onrender.com/api/admin/groomer/all-bookings");
                 if (!res.ok) throw new Error('Network response was not ok');
                 const data = await res.json();
                 setBookings(data.bookings || []);
@@ -53,7 +53,7 @@ const GrBookingPage = ({ isMobile }) => {
     const deleteBooking = async (id) => {
         if (!window.confirm("Are you sure you want to delete this booking?")) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/groomer/delete/${id}`, { method: "DELETE" });
+            const res = await fetch(`https://cado-dog-grooming-backend.onrender.com/api/groomer/delete/${id}`, { method: "DELETE" });
             const data = await res.json();
             if (data.success) {
                 setBookings(bookings.filter(b => b._id !== id));

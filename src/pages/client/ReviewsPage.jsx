@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import "./ReviewsPage.css";
 
-const BACKEND_BASE_URL = "http://localhost:5000/";
+const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com/";
 
 const ReviewsPage = () => {
   const { roomId } = useParams();

@@ -77,7 +77,7 @@ const RoomHosterDashboard = () => {
 
         const config = { headers: { Authorization: `Bearer ${token}` } };
 
-        const bookingRes = await axios.get(`http://localhost:5000/api/hostBookings/host/${userId}`, config);
+        const bookingRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/hostBookings/host/${userId}`, config);
         const bookings = bookingRes.data.success ? bookingRes.data.bookings : [];
 
         const lastSeen = localStorage.getItem("lastSeenBookingsAt");
@@ -105,20 +105,20 @@ const RoomHosterDashboard = () => {
           }, {})
         };
 
-        const reviewRes = await axios.get(`http://localhost:5000/api/host-reviews/host/${userId}`, config);
+        const reviewRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/host-reviews/host/${userId}`, config);
         const reviews = reviewRes.data.reviews || [];
 
-        const hostRes = await axios.get("http://localhost:5000/api/hosts/profile", config);
+        const hostRes = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/hosts/profile", config);
         const hostProfile = hostRes.data.success ? hostRes.data.host : {};
 
-        const roomRes = await axios.get(`http://localhost:5000/api/rooms/user/${userId}`, config);
+        const roomRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/rooms/user/${userId}`, config);
         const rooms = roomRes.data.rooms || [];
 
         if (rooms.length) {
           localStorage.setItem("hostListingIds", JSON.stringify(rooms.map(r => r._id)));
         }
 
-        const walletRes = await axios.get(`http://localhost:5000/api/wallet/summary/${userId}`, config);
+        const walletRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/wallet/summary/${userId}`, config);
         const wallet = walletRes.data.wallet || {};
 
         setData({ host: hostProfile, rooms, bookings, reviews, wallet, summary });
@@ -141,7 +141,7 @@ const RoomHosterDashboard = () => {
     try {
       const token = localStorage.getItem("token") || localStorage.getItem("authToken");
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const res = await axios.put(`http://localhost:5000/api/hostBookings/commissionPaid/${bookingId}`, {}, config);
+      const res = await axios.put(`https://cado-dog-grooming-backend.onrender.com/api/hostBookings/commissionPaid/${bookingId}`, {}, config);
 
       if (res.data.success) {
         setData(prev => {

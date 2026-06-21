@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { OYO_PRIMARY, BOX_STYLE, CARD_BG } from "./Constants.jsx";
 
-const BACKEND_BASE_URL = "http://localhost:5000";
+const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com";
 
 const RoomBookingsPage = ({ isMobile }) => {
   const [bookings, setBookings] = useState([]);

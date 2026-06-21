@@ -25,7 +25,7 @@ const AMENITIES_OPTIONS = ['Food', 'Toys', 'Grooming', 'Air-conditioned', 'CCTV'
 const SIZES_OPTIONS = ['Small (0-10 kg)', 'Medium (10-25 kg)', 'Large (25+ kg)'];
 const REFUND_POLICIES = ['Flexible', 'Moderate', 'Strict'];
 
-const API_URL = 'http://localhost:5000/api/admin/dogstay';
+const API_URL = 'https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay';
 
 // --- Sub-components (Refactored to use Classes) ---
 

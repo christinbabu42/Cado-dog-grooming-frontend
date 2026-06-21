@@ -32,14 +32,14 @@ const StaffEarningsPage = () => {
           window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        const { data } = await axios.get("http://localhost:5000/api/user/me", {
+        const { data } = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         if (data.role === "grstaff" && data.staffProfile) {
           setStaffProfile(data.staffProfile);
           const res = await axios.get(
-            `http://localhost:5000/api/groomer/staff/earnings/${data.staffProfile._id}`,
+            `https://cado-dog-grooming-backend.onrender.com/api/groomer/staff/earnings/${data.staffProfile._id}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           if (res.data.success) setEarnings(res.data);

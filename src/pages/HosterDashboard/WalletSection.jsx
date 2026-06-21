@@ -26,7 +26,7 @@ const WalletSection = ({ wallet = {}, onWithdraw, hostId }) => {
     const fetchWalletSummary = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/wallet/summary/${hostId}`
+          `https://cado-dog-grooming-backend.onrender.com/api/wallet/summary/${hostId}`
         );
 
         if (res.data?.success) {

@@ -60,7 +60,7 @@ const DogStayDetail = ({ listing, onBack, isMobile, onApprove, onReject }) => {
     const handleSave = async () => {
         setLoading(true);
         try {
-            const response = await axios.put(`http://localhost:5000/api/admin/dogstay/dogstay/${listing._id}`, editData);
+            const response = await axios.put(`https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/dogstay/${listing._id}`, editData);
             if (response.data.success) {
                 alert('Listing updated successfully!');
                 setIsEditing(false);
@@ -170,8 +170,8 @@ const DogStayDetail = ({ listing, onBack, isMobile, onApprove, onReject }) => {
             {/* Media & Photos */}
             <div style={{ marginTop: '30px', border: '1px solid #ddd', borderRadius: '8px', padding: '20px' }}>
                 <h3 style={{ color: OYO_SECONDARY, marginTop: 0 }}>Verification & Media</h3>
-                {renderDetailItem({ icon: FaIdCard, label: "Host ID Proof", valueKey: "idProof", displayValue: editData.idProof ? <a href={`http://localhost:5000/${editData.idProof}`} target="_blank" rel="noopener noreferrer" style={{ color: OYO_PRIMARY }}>View Document</a> : 'Not Uploaded' })}
-                {renderDetailItem({ icon: FaCamera, label: "Video", valueKey: "video", displayValue: editData.video ? <a href={`http://localhost:5000/${editData.video}`} target="_blank" rel="noopener noreferrer" style={{ color: OYO_PRIMARY }}>View Video</a> : 'Not Uploaded' })}
+                {renderDetailItem({ icon: FaIdCard, label: "Host ID Proof", valueKey: "idProof", displayValue: editData.idProof ? <a href={`https://cado-dog-grooming-backend.onrender.com/${editData.idProof}`} target="_blank" rel="noopener noreferrer" style={{ color: OYO_PRIMARY }}>View Document</a> : 'Not Uploaded' })}
+                {renderDetailItem({ icon: FaCamera, label: "Video", valueKey: "video", displayValue: editData.video ? <a href={`https://cado-dog-grooming-backend.onrender.com/${editData.video}`} target="_blank" rel="noopener noreferrer" style={{ color: OYO_PRIMARY }}>View Video</a> : 'Not Uploaded' })}
                 {renderDetailItem({ icon: FaCamera, label: "Photos Count", valueKey: "photos", displayValue: photos.length > 0 ? `${photos.length} uploaded` : 'None' })}
 
                 {photos.length > 0 && (
@@ -188,10 +188,10 @@ const DogStayDetail = ({ listing, onBack, isMobile, onApprove, onReject }) => {
                                 <div 
                                     key={index}
                                     style={{ overflow: 'hidden', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)', height: isMobile ? '120px' : '180px', cursor: 'pointer' }}
-                                    onClick={() => window.open(`http://localhost:5000/${photoPath}`, '_blank')} 
+                                    onClick={() => window.open(`https://cado-dog-grooming-backend.onrender.com/${photoPath}`, '_blank')} 
                                 >
                                     <img 
-                                        src={`http://localhost:5000/${photoPath}`} 
+                                        src={`https://cado-dog-grooming-backend.onrender.com/${photoPath}`} 
                                         alt={`Listing Photo ${index + 1}`} 
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         onError={(e) => { e.target.onerror = null; e.target.src = "https://via.placeholder.com/180?text=Image+Error" }}

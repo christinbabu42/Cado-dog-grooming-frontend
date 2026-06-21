@@ -46,7 +46,7 @@ const ProfileView = ({ staffProfile: initialProfile }) => {
     try {
       const token = localStorage.getItem("authToken");
       const { data } = await axios.put(
-        "http://localhost:5000/api/user/bank-details",
+        "https://cado-dog-grooming-backend.onrender.com/api/user/bank-details",
         {
           accountHolder: bankDetails.accountHolder,
           bankName: bankDetails.bankName,

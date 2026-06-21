@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { BOX_STYLE, OYO_PRIMARY } from "./Constants.jsx";
 
-const BACKEND_BASE_URL = "http://localhost:5000";
+const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com";
 
 const RoomBookingDetails = () => {
   const { id } = useParams();

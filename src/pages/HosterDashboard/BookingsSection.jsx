@@ -29,7 +29,7 @@ const HostBookingsPage = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/hostBookings/host/${hostId}`
+          `https://cado-dog-grooming-backend.onrender.com/api/hostBookings/host/${hostId}`
         );
 
         if (res.data.success) {

@@ -41,7 +41,7 @@ const HostLogin = () => {
     window.history.replaceState({}, document.title, "/host-dashboard");
 
     axios
-      .get("http://localhost:5000/api/hosts/profile", {
+      .get("https://cado-dog-grooming-backend.onrender.com/api/hosts/profile", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -71,7 +71,7 @@ const HostLogin = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/host/login",
+        "https://cado-dog-grooming-backend.onrender.com/api/host/login",
         { email, password }
       );
 
@@ -102,7 +102,7 @@ const HostLogin = () => {
 
     setTimeout(() => {
       window.location.href =
-        "http://localhost:5000/auth/google?loginType=host";
+        "https://cado-dog-grooming-backend.onrender.com/auth/google?loginType=host";
     }, 800);
   };
 

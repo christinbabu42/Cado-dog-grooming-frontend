@@ -13,7 +13,7 @@ const GroomerDetailsPage = () => {
   useEffect(() => {
     const fetchGroomer = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/grooming-staff/${id}`);
+        const res = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/grooming-staff/${id}`);
         if (res.data.success) {
           setGroomer(res.data.data);
           setEditForm(res.data.data);
@@ -35,7 +35,7 @@ const GroomerDetailsPage = () => {
   );
 
   const idProofUrl = groomer.idProof
-    ? `http://localhost:5000/uploads/${groomer.idProof}`
+    ? `https://cado-dog-grooming-backend.onrender.com/uploads/${groomer.idProof}`
     : null;
 
   const handleChange = (e) => {
@@ -45,7 +45,7 @@ const GroomerDetailsPage = () => {
   const handleSave = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/grooming-staff/${id}`,
+        `https://cado-dog-grooming-backend.onrender.com/api/grooming-staff/${id}`,
         editForm
       );
       if (res.data.success) {
@@ -64,7 +64,7 @@ const GroomerDetailsPage = () => {
   const handleApprove = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/grooming-staff/${id}/approve`
+        `https://cado-dog-grooming-backend.onrender.com/api/grooming-staff/${id}/approve`
       );
       if (res.data.success) {
         alert("Groomer approved successfully!");
@@ -80,7 +80,7 @@ const GroomerDetailsPage = () => {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this record?")) return;
     try {
-      const res = await axios.delete(`http://localhost:5000/api/grooming-staff/${id}`);
+      const res = await axios.delete(`https://cado-dog-grooming-backend.onrender.com/api/grooming-staff/${id}`);
       if (res.data.success) {
         alert("Record deleted successfully.");
         navigate(-1);

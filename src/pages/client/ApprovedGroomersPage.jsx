@@ -128,7 +128,7 @@ const ApprovedGroomersPage = () => {
 
   const fetchApprovedGroomers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/grooming-staff");
+      const res = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/grooming-staff");
       if (res.data.success) {
         const approved = res.data.data.filter((g) => g.isApproved);
         setApprovedGroomers(approved);

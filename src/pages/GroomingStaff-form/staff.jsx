@@ -91,7 +91,7 @@ const App = () => {
         try {
             const token = localStorage.getItem("token");
             const { data } = await axios.post(
-                "http://localhost:5000/api/groomer/create-order",
+                "https://cado-dog-grooming-backend.onrender.com/api/groomer/create-order",
                 { servicePrice: formPrice, staffId: selectedStaffId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -188,7 +188,7 @@ const App = () => {
                 formDataToSend.append("idProof", formData.idProof);
             }
 
-            const response = await fetch("http://localhost:5000/api/grooming-staff", {
+            const response = await fetch("https://cado-dog-grooming-backend.onrender.com/api/grooming-staff", {
                 method: "POST",
                 body: formDataToSend,
             });

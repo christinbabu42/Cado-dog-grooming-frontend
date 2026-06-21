@@ -28,7 +28,7 @@ import GrBookingPage from './GrBookingPage.jsx';
    AXIOS INSTANCE
 ======================= */
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "https://cado-dog-grooming-backend.onrender.com/api",
 });
 
 axiosInstance.interceptors.request.use(
@@ -88,8 +88,8 @@ const AdminDashboard = () => {
         if (!window.confirm(`Are you sure you want to ${action} listing ID ${listingId.slice(-4)}?`)) return;
 
         const url = approve
-            ? `http://localhost:5000/api/admin/dogstay/approve/${listingId}`
-            : `http://localhost:5000/api/admin/dogstay/status/${listingId}`;
+            ? `https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/approve/${listingId}`
+            : `https://cado-dog-grooming-backend.onrender.com/api/admin/dogstay/status/${listingId}`;
 
         const body = approve ? {} : { isApproved: false, isRejected: true };
 
