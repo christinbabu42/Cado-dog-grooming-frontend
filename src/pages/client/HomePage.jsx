@@ -6,6 +6,19 @@ import nav from './Home/NavBar.module.css';
 import search from './Home/SearchBar.module.css';
 import footer from './Home/Footer.module.css';
 
+import image2 from '../../../public/image2.png';
+import image3 from '../../../public/image3.png';
+import image4 from '../../../public/image4.png';
+import image5 from '../../../public/image5.png';
+
+
+[
+  image2,
+  image3,
+  image4,
+  image5,
+]
+
 // --- Icon ---
 const Icon = ({ children, className }) => (
   <span className={className}>{children}</span>
@@ -206,12 +219,12 @@ const HomePage = () => {
       padding: '20px 0',
     }}
   >
-    {[
-      './../../../public/image2.png',
-      './../../../public/image3.png',
-      './../../../public/image4.png',
-      './../../../public/image5.png',
-    ].map((img, i) => (
+{[
+  '/image2.png',
+  '/image3.png',
+  '/image4.png',
+  '/image5.png',
+].map((img, i) => (
       <div
         key={i}
         style={{
