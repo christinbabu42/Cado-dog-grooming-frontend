@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axiosInstance from "../utils/axios";
 import './UserProfile.css'; // Importing the separate CSS file
 import {
     FaStar, FaMapMarkerAlt, FaCalendarAlt, FaChevronDown, FaTimes, FaFilter, FaAngleRight,
@@ -87,10 +87,7 @@ const UserProfilePage = () => {
     }, []);
 
     const fetchUserData = () => {
-        const token = localStorage.getItem("authToken");
-        axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+        axiosInstance.get("/api/user/me")
         .then(res => {
             setUser(res.data);
             setEditData(res.data);
@@ -106,10 +103,7 @@ const UserProfilePage = () => {
     const saveProfileUpdate = async () => {
         setIsUpdating(true);
         try {
-            const token = localStorage.getItem("authToken");
-            await axios.put("https://cado-dog-grooming-backend.onrender.com/api/user/update", editData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axiosInstance.put("/api/user/update", editData);
             setUser(editData);
             setIsEditing(false);
             alert("Profile updated successfully! ✨");
@@ -130,15 +124,13 @@ const UserProfilePage = () => {
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
                 try {
-                    const token = localStorage.getItem("authToken");
-                    await axios.put(
-                        "https://cado-dog-grooming-backend.onrender.com/api/user/location",
+                    await axiosInstance.put(
+                        "/api/user/location",
                         {
                             lat: pos.coords.latitude,
                             lng: pos.coords.longitude,
                             address: editData.address || "Saved via GPS"
-                        },
-                        { headers: { Authorization: `Bearer ${token}` } }
+                        }
                     );
                     fetchUserData();
                     alert("Location coordinates saved! 📍");
