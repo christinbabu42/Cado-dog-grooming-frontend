@@ -27,80 +27,64 @@ const LoginScreen = () => {
     };
 
     // ⭐ DETECT GOOGLE LOGIN SUCCESS
-useEffect(() => {
-    console.log("📌 Login Screen mounted");
-    console.log("📌 Current URL:", window.location.href);
+    useEffect(() => {
+        console.log("📌 Login Screen mounted");
+        console.log("📌 Current URL:", window.location.href);
+        console.log("📌 URL Query:", location.search);
 
-    const queryParams = new URLSearchParams(location.search);
-    const token = queryParams.get("token");
+        // Remove token from URL if present to clean up the browser bar
+        window.history.replaceState({}, document.title, "/login");
 
-    console.log("📌 URL Query:", location.search);
-    console.log("📌 Extracted token:", token);
+        // ⭐ Fetch logged-in user's details using axios via HttpOnly Cookies
+        axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
+            withCredentials: true
+        })
+        .then(res => {
+            console.log("📌 API Response:", res.data);
 
-    if (!token) {
-        console.log("❌ No token found in URL. Google login failed or user returned without login.");
-        return;
-    }
+            const data = res.data;
 
-    // Save token
-    localStorage.setItem("authToken", token);
-    localStorage.setItem("token", token);
+            // Save to localStorage
+            localStorage.setItem("user", JSON.stringify(data));
+            localStorage.setItem("userId", data._id);
+            localStorage.setItem("userName", data.name || "");
+            localStorage.setItem("userEmail", data.email || "");
+            localStorage.setItem("userPhoto", data.profilePic || "");
+            localStorage.setItem("userCountry", data.country || "");
+            localStorage.setItem("walletBalance", data.walletBalance || 0);
 
-    console.log("🔥 Token saved to localStorage:", token);
+            console.log("🔥 User Saved to Storage");
 
-    // Remove token from URL
-    window.history.replaceState({}, document.title, "/login");
-
-    // ⭐ Fetch logged-in user's details using axios
-    axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
-        headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(res => {
-        console.log("📌 API Response:", res.data);
-
-        const data = res.data;
-
-        // Save to localStorage
-        localStorage.setItem("user", JSON.stringify(data));
-        localStorage.setItem("userId", data._id);
-        localStorage.setItem("userName", data.name || "");
-        localStorage.setItem("userEmail", data.email || "");
-        localStorage.setItem("userPhoto", data.profilePic || "");
-        localStorage.setItem("userCountry", data.country || "");
-        localStorage.setItem("walletBalance", data.walletBalance || 0);
-
-        console.log("🔥 User Saved to Storage");
-
-        // ✅ SAVE STAFF PROFILE IF ROLE = GRSTAFF
+            // ✅ SAVE STAFF PROFILE IF ROLE = GRSTAFF
             if (data.role === "grstaff" && data.staffProfile) {
                 const staffProfile = data.staffProfile;
 
-            // Save the full profile
-            localStorage.setItem("staffProfile", JSON.stringify(staffProfile));
+                // Save the full profile
+                localStorage.setItem("staffProfile", JSON.stringify(staffProfile));
 
-            // _id = grooming staff MongoDB ID
-            if (staffProfile._id) {
-                localStorage.setItem("staffId", staffProfile._id.toString());
-                console.log("🔥 staffId saved:", staffProfile._id.toString());
+                // _id = grooming staff MongoDB ID
+                if (staffProfile._id) {
+                    localStorage.setItem("staffId", staffProfile._id.toString());
+                    console.log("🔥 staffId saved:", staffProfile._id.toString());
+                }
+
+                // staffID = linked user._id
+                if (staffProfile.staffID) {
+                    localStorage.setItem("staffUserId", staffProfile.staffID.toString());
+                    console.log("🔥 staffUserId saved:", staffProfile.staffID.toString());
+                }
+
+                console.log("Staff profile:", staffProfile);
             }
 
-            // staffID = linked user._id
-            if (staffProfile.staffID) {
-                localStorage.setItem("staffUserId", staffProfile.staffID.toString());
-                console.log("🔥 staffUserId saved:", staffProfile.staffID.toString());
-            }
+            showAlert("Successfully logged in!", "success", true);
+        })
+        .catch(err => {
+            console.log("❌ Axios Error:", err);
+            showAlert("Unable to fetch user details!", "error", true);
+        });
 
-            console.log("Staff profile:", staffProfile);
-        }
-
-        showAlert("Successfully logged in!", "success", true);
-    })
-    .catch(err => {
-        console.log("❌ Axios Error:", err);
-        showAlert("Unable to fetch user details!", "error", true);
-    });
-
-}, [location]);
+    }, [location]);
 
 
     // ⭐ GOOGLE SIGN-IN
@@ -130,7 +114,7 @@ useEffect(() => {
 
             <div className="login-container">
                
-                
+               
                 
                 <h2 className="signup-title">Login</h2>
 

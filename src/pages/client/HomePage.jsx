@@ -198,8 +198,7 @@ const HomePage = () => {
   const { isMobile } = useWindowWidth();
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token');
-    if (token) localStorage.setItem('authToken', token);
+    // Legacy URL token checking completely cleared to maintain security parity with HttpOnly Cookies.
   }, []);
 
   return (
