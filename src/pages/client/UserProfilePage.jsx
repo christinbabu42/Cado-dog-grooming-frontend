@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../../utils/axiosInstance";
 import './UserProfile.css'; // Importing the separate CSS file
 import {
     FaStar, FaMapMarkerAlt, FaCalendarAlt, FaChevronDown, FaTimes, FaFilter, FaAngleRight,
