@@ -7,6 +7,16 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    // ----------------------------------
+    // 🔑 FALLBACK: Read token from localStorage
+    // ----------------------------------
+    const token = localStorage.getItem("authToken");
+    
+    // If the token exists locally, attach it as a Bearer token header
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
     return config;
   },
   (error) => Promise.reject(error)
