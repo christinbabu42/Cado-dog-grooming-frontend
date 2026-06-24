@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 // 🔑 CHANGED: Switched vanilla axios to your custom instance
-import axios from "../../utils/axios"; 
+import axios from "../../utils/axiosInstance"; 
 import { FaMapMarkerAlt, FaEdit, FaCheckCircle, FaSatellite, FaPaw, FaUser, FaCat, FaDog } from 'react-icons/fa';
 import { useLocation } from "react-router-dom";
 import Swal from 'sweetalert2'; // Beautiful Alert Library
