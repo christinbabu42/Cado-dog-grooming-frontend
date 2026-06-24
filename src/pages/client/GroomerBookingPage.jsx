@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+// 🔑 CHANGED: Switched vanilla axios to your custom instance
+import axios from "../../utils/axios"; 
 import { FaMapMarkerAlt, FaEdit, FaCheckCircle, FaSatellite, FaPaw, FaUser, FaCat, FaDog } from 'react-icons/fa';
 import { useLocation } from "react-router-dom";
 import Swal from 'sweetalert2'; // Beautiful Alert Library
@@ -69,32 +70,30 @@ const GroomerBookingPage = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // BEAUTIFUL ALERT HELPER
-// BEAUTIFUL PREMIUM GOLD ALERT HELPER
-const showAlert = (title, text, icon = 'success') => {
-  Swal.fire({
-    title,
-    text,
-    icon,
-    background: '#1a1a1a',        // dark premium background
-    color: '#FFD700',             // golden text
-    iconColor: icon === 'success' ? '#FFD700' : (icon === 'warning' ? '#FFA500' : '#ef4444'),
-    confirmButtonColor: '#FFD700', // gold button
-    confirmButtonText: 'Great!',
-    customClass: {
-      popup: 'premium-swal-popup',
-      title: 'premium-swal-title',
-      content: 'premium-swal-content',
-      confirmButton: 'premium-swal-btn'
-    }
-  });
-};
-
+    // BEAUTIFUL PREMIUM GOLD ALERT HELPER
+    const showAlert = (title, text, icon = 'success') => {
+      Swal.fire({
+        title,
+        text,
+        icon,
+        background: '#1a1a1a',        // dark premium background
+        color: '#FFD700',              // golden text
+        iconColor: icon === 'success' ? '#FFD700' : (icon === 'warning' ? '#FFA500' : '#ef4444'),
+        confirmButtonColor: '#FFD700', // gold button
+        confirmButtonText: 'Great!',
+        customClass: {
+          popup: 'premium-swal-popup',
+          title: 'premium-swal-title',
+          content: 'premium-swal-content',
+          confirmButton: 'premium-swal-btn'
+        }
+      });
+    };
 
     // DATA FETCHING
     const fetchStaff = async (id) => {
       try { 
-        const { data } = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/groomer/${id}`); 
+        const { data } = await axios.get(`/api/groomer/${id}`); 
         if (data.success) setStaffInfo(data.staff); 
       } 
       catch (err) { console.error("Failed to fetch staff info:", err); }
@@ -102,8 +101,8 @@ const showAlert = (title, text, icon = 'success') => {
 
     const fetchUserProfile = async () => {
       try {
-        const token = localStorage.getItem("authToken");
-        const { data } = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", { headers: { Authorization: `Bearer ${token}` } });
+        // Axios interceptor automatically passes global headers now
+        const { data } = await axios.get("/api/user/me");
         if (data) {
           setForm(prev => ({
             ...prev,
@@ -123,13 +122,11 @@ const showAlert = (title, text, icon = 'success') => {
     const calculateTravel = useCallback(async () => {
       if (!form.price || !form.lat || !form.lng || !selectedStaffID) return;
       try {
-        const token = localStorage.getItem("authToken");
         const totalServicePrice = form.price * petCount;
         
         const { data } = await axios.post(
-          "https://cado-dog-grooming-backend.onrender.com/api/groomer/calculate-travel",
-          { staffID: selectedStaffID, servicePrice: totalServicePrice, userLat: form.lat, userLng: form.lng },
-          { headers: { Authorization: `Bearer ${token}` } }
+          "/api/groomer/calculate-travel",
+          { staffID: selectedStaffID, servicePrice: totalServicePrice, userLat: form.lat, userLng: form.lng }
         );
         setDistanceInfo({ km: data.distanceKm, travelCharge: data.travelCharge, finalAmount: data.finalAmount });
       } catch (err) { console.error("Travel calculation failed:", err); }
@@ -178,8 +175,7 @@ const showAlert = (title, text, icon = 'success') => {
     const saveAddressToBackend = async () => {
       setSavingLocation(true);
       try {
-        const token = localStorage.getItem("authToken");
-        await axios.put("https://cado-dog-grooming-backend.onrender.com/api/user/location", { address: form.address, lat: form.lat, lng: form.lng }, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put("/api/user/location", { address: form.address, lat: form.lat, lng: form.lng });
         showAlert("Address Saved", "Your service location is now locked in. ✅");
         setIsEditAddress(false);
         calculateTravel();
@@ -216,11 +212,9 @@ const showAlert = (title, text, icon = 'success') => {
       if (!validateForm()) return; 
 
       try {
-        const token = localStorage.getItem("authToken");
         const { data } = await axios.post(
-          "https://cado-dog-grooming-backend.onrender.com/api/groomer/create-order",
-          { finalAmount: distanceInfo.finalAmount },
-          { headers: { Authorization: `Bearer ${token}` } }
+          "/api/groomer/create-order",
+          { finalAmount: distanceInfo.finalAmount }
         );
 
         const options = {
@@ -232,14 +226,13 @@ const showAlert = (title, text, icon = 'success') => {
           handler: async function (res) {
             try {
               await axios.post(
-                "https://cado-dog-grooming-backend.onrender.com/api/groomer/verify-payment",
+                "/api/groomer/verify-payment",
                 { 
                   razorpay_payment_id: res.razorpay_payment_id, 
                   razorpay_order_id: res.razorpay_order_id, 
                   razorpay_signature: res.razorpay_signature, 
                   form: getBookingPayload() 
-                },
-                { headers: { Authorization: `Bearer ${token}` } }
+                }
               );
               showAlert("Booking Confirmed!", "Payment successful! Your groomer is notified. ✅");
               resetForm();
@@ -260,7 +253,7 @@ const showAlert = (title, text, icon = 'success') => {
     const handleCashPayment = async () => {
       if (!validateForm()) return; 
       try {
-        await axios.post("https://cado-dog-grooming-backend.onrender.com/api/groomer/cash-payment", getBookingPayload());
+        await axios.post("/api/groomer/cash-payment", getBookingPayload());
         showAlert("Booking Successful!", `Order placed for ₹${distanceInfo.finalAmount}. Please pay the groomer in cash.`);
         resetForm();
       } catch (err) { showAlert("Error", "Cash booking failed. Please try online payment.", "error"); }
@@ -371,38 +364,38 @@ const showAlert = (title, text, icon = 'success') => {
             </section>
           </form>
 
- <aside className="summary-sidebar">
-  <div className="summary-sticky-card">
-    <div style={{marginBottom: '20px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px'}}>
-      <p style={{fontSize: '0.8rem', color: '#94a3b8', margin: '0 0 5px 0'}}>Selected Expert</p>
-      <p style={{margin: 0, fontWeight: 700, color: '#FFD700'}}>{localGroomer?.fullName}</p> 
-      <p style={{fontSize: '0.7rem', color: '#64748b', margin: '3px 0'}}>ID: {localGroomer?._id}</p>
-      <p style={{fontSize: '0.75rem', color: '#94a3b8', margin: '5px 0 0 0'}}>Base: {localGroomer?.placeAddress}</p>
-    </div>
+          <aside className="summary-sidebar">
+            <div className="summary-sticky-card">
+              <div style={{marginBottom: '20px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px'}}>
+                <p style={{fontSize: '0.8rem', color: '#94a3b8', margin: '0 0 5px 0'}}>Selected Expert</p>
+                <p style={{margin: 0, fontWeight: 700, color: '#FFD700'}}>{localGroomer?.fullName}</p> 
+                <p style={{fontSize: '0.7rem', color: '#64748b', margin: '3px 0'}}>ID: {localGroomer?._id}</p>
+                <p style={{fontSize: '0.75rem', color: '#94a3b8', margin: '5px 0 0 0'}}>Base: {localGroomer?.placeAddress}</p>
+              </div>
 
-    <h3 style={{color: '#FFD700'}}>Booking Summary</h3>
-    <div className="summary-item"><span>Service</span><span style={{color: '#FFD700'}}>{form.service || "Not selected"}</span></div>
-    <div className="summary-item"><span>{petType} Count</span><span>x {petCount}</span></div>
-    <div className="summary-item"><span>Base Price</span><span style={{color: '#FFD700'}}>₹{form.price * petCount}</span></div>
-    <div className="summary-item travel"><span>Travel ({distanceInfo.km}km)</span><span>+ ₹{distanceInfo.travelCharge}</span></div>
-    <div className="total-divider"></div>
-    <div className="summary-item total"><span>Grand Total</span><span style={{color: '#FFD700', fontWeight: 700}}>₹{distanceInfo.finalAmount}</span></div>
+              <h3 style={{color: '#FFD700'}}>Booking Summary</h3>
+              <div className="summary-item"><span>Service</span><span style={{color: '#FFD700'}}>{form.service || "Not selected"}</span></div>
+              <div className="summary-item"><span>{petType} Count</span><span>x {petCount}</span></div>
+              <div className="summary-item"><span>Base Price</span><span style={{color: '#FFD700'}}>₹{form.price * petCount}</span></div>
+              <div className="summary-item travel"><span>Travel ({distanceInfo.km}km)</span><span>+ ₹{distanceInfo.travelCharge}</span></div>
+              <div className="total-divider"></div>
+              <div className="summary-item total"><span>Grand Total</span><span style={{color: '#FFD700', fontWeight: 700}}>₹{distanceInfo.finalAmount}</span></div>
 
-    <div className="payment-actions">
-      <button type="submit" onClick={handleSubmit} className="pay-online-premium">
-        Confirm & Pay Online
-      </button>
-      <button type="button" onClick={handleCashPayment} className="pay-cash-premium">
-        Book Now, Pay Cash
-      </button>
-    </div>
+              <div className="payment-actions">
+                <button type="submit" onClick={handleSubmit} className="pay-online-premium">
+                  Confirm & Pay Online
+                </button>
+                <button type="button" onClick={handleCashPayment} className="pay-cash-premium">
+                  Book Now, Pay Cash
+                </button>
+              </div>
 
-    <div className="trust-badges">
-      <span><FaCheckCircle /> Professional Groomers</span>
-      <span><FaCheckCircle /> Safe & Hygienic</span>
-    </div>
-  </div>
-</aside>
+              <div className="trust-badges">
+                <span><FaCheckCircle /> Professional Groomers</span>
+                <span><FaCheckCircle /> Safe & Hygienic</span>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     );
