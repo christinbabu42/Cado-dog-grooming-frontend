@@ -120,17 +120,23 @@ const GroomerBookingPage = () => {
     };
 
     const calculateTravel = useCallback(async () => {
-      if (!form.price || !form.lat || !form.lng || !selectedStaffID) return;
+      if (!form.service || !form.dogSize || !form.lat || !form.lng || !selectedStaffID) return;
       try {
-        const totalServicePrice = form.price * petCount;
-        
+        // 🔒 SECURED: Sending options details to backend instead of manual computed final total
         const { data } = await axios.post(
           "/api/groomer/calculate-travel",
-          { staffID: selectedStaffID, servicePrice: totalServicePrice, userLat: form.lat, userLng: form.lng }
+          { 
+            staffID: selectedStaffID, 
+            service: form.service,
+            dogSize: form.dogSize,
+            petCount: petCount, 
+            userLat: form.lat, 
+            userLng: form.lng 
+          }
         );
         setDistanceInfo({ km: data.distanceKm, travelCharge: data.travelCharge, finalAmount: data.finalAmount });
       } catch (err) { console.error("Travel calculation failed:", err); }
-    }, [form.price, form.lat, form.lng, selectedStaffID, petCount]);
+    }, [form.service, form.dogSize, form.lat, form.lng, selectedStaffID, petCount]);
 
     useEffect(() => {
       const script = document.createElement("script");
@@ -194,17 +200,25 @@ const GroomerBookingPage = () => {
       return true;
     };
 
+    // 🔒 SECURED: Extracted client-manipulable calculations out from payload
     const getBookingPayload = () => {
       return {
-        ...form,
-        ...distanceInfo,
-        petType,
-        petCount,
-        staffId: localGroomer?._id || selectedStaffID,
+        petName: form.petName,
+        breed: form.breed,
+        name: form.name,
+        phone: form.phone,
+        address: form.address,
+        city: form.city,
+        service: form.service,
+        dogSize: form.dogSize,
+        petCount: petCount,
+        petType: petType,
+        staffID: localGroomer?._id || selectedStaffID,
         staffName: localGroomer?.fullName || staffInfo?.name,
         staffPhone: localGroomer?.phone || "",
         staffLocation: localGroomer?.location || staffInfo?.location,
-        userLocation: { lat: form.lat, lng: form.lng }
+        lat: form.lat,
+        lng: form.lng
       };
     };
 
@@ -212,9 +226,17 @@ const GroomerBookingPage = () => {
       if (!validateForm()) return; 
 
       try {
+        // 🔒 SECURED: Sending configuration data instead of client-side finalAmount
         const { data } = await axios.post(
           "/api/groomer/create-order",
-          { finalAmount: distanceInfo.finalAmount }
+          {
+            service: form.service,
+            dogSize: form.dogSize,
+            petCount: petCount,
+            staffID: localGroomer?._id || selectedStaffID,
+            userLat: form.lat,
+            userLng: form.lng
+          }
         );
 
         const options = {
@@ -225,6 +247,7 @@ const GroomerBookingPage = () => {
           order_id: data.order.id,
           handler: async function (res) {
             try {
+              // 🔒 SECURED: form payload inside verification has no mutable pricing integers
               await axios.post(
                 "/api/groomer/verify-payment",
                 { 
@@ -253,6 +276,7 @@ const GroomerBookingPage = () => {
     const handleCashPayment = async () => {
       if (!validateForm()) return; 
       try {
+        // 🔒 SECURED: Payload configuration only contains raw user inputs
         await axios.post("/api/groomer/cash-payment", getBookingPayload());
         showAlert("Booking Successful!", `Order placed for ₹${distanceInfo.finalAmount}. Please pay the groomer in cash.`);
         resetForm();
