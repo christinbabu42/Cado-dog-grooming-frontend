@@ -200,7 +200,7 @@ const GroomerBookingPage = () => {
       return true;
     };
 
-    // 🔒 SECURED: Extracted client-manipulable calculations out from payload
+    // 🔒 SECURED & FIXED: Corrected staffID property usage and mapping layout
     const getBookingPayload = () => {
       return {
         petName: form.petName,
@@ -213,7 +213,7 @@ const GroomerBookingPage = () => {
         dogSize: form.dogSize,
         petCount: petCount,
         petType: petType,
-        staffID: localGroomer?._id || selectedStaffID,
+        staffID: localGroomer?.staffID || selectedStaffID,
         staffName: localGroomer?.fullName || staffInfo?.name,
         staffPhone: localGroomer?.phone || "",
         staffLocation: localGroomer?.location || staffInfo?.location,
@@ -226,14 +226,14 @@ const GroomerBookingPage = () => {
       if (!validateForm()) return; 
 
       try {
-        // 🔒 SECURED: Sending configuration data instead of client-side finalAmount
+        // 🔒 SECURED & FIXED: Corrected staffID mapping parameters
         const { data } = await axios.post(
           "/api/groomer/create-order",
           {
             service: form.service,
             dogSize: form.dogSize,
             petCount: petCount,
-            staffID: localGroomer?._id || selectedStaffID,
+            staffID: localGroomer?.staffID || selectedStaffID,
             userLat: form.lat,
             userLng: form.lng
           }
@@ -393,7 +393,7 @@ const GroomerBookingPage = () => {
               <div style={{marginBottom: '20px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px'}}>
                 <p style={{fontSize: '0.8rem', color: '#94a3b8', margin: '0 0 5px 0'}}>Selected Expert</p>
                 <p style={{margin: 0, fontWeight: 700, color: '#FFD700'}}>{localGroomer?.fullName}</p> 
-                <p style={{fontSize: '0.7rem', color: '#64748b', margin: '3px 0'}}>ID: {localGroomer?._id}</p>
+                <p style={{fontSize: '0.7rem', color: '#64748b', margin: '3px 0'}}>ID: {localGroomer?.staffID || localGroomer?._id}</p>
                 <p style={{fontSize: '0.75rem', color: '#94a3b8', margin: '5px 0 0 0'}}>Base: {localGroomer?.placeAddress}</p>
               </div>
 
