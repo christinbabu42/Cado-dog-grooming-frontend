@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
   FaPaw, FaStar, FaUser, FaEnvelope, FaMobileAlt, FaCalendarAlt,
-  FaCreditCard, FaLock, FaCheckCircle, FaDog
+  FaLock, FaCheckCircle, FaDog
 } from 'react-icons/fa';
 
 // --- Premium Golden Color Palette ---
-const GOLD_PRIMARY = '#D4AF37'; // Classic Gold
-const GOLD_DARK = '#AA8439';    // Deep Golden
-const GOLD_LIGHT = '#F9F4E8';   // Soft Creamy Gold Background
-const TEXT_BLACK = '#000000';   // Pure Black Text
+const GOLD_PRIMARY = '#D4AF37'; 
+const GOLD_DARK = '#AA8439';    
+const GOLD_LIGHT = '#F9F4E8';   
+const TEXT_BLACK = '#000000';   
 const CARD_BG = '#ffffff';
 const BOX_STYLE = { boxSizing: 'border-box' };
 const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
@@ -56,8 +56,6 @@ const BookingInput = ({ icon: Icon, placeholder, value, onChange, type = 'text',
   </div>
 );
 
-// --- SUB-COMPONENTS ---
-
 const StaySummaryCard = ({ stayData, costDetails, bookingDetails, averageRating, totalReviews }) => {
   if (!stayData) return <p style={{ color: TEXT_BLACK }}>Loading stay details...</p>;
 
@@ -67,41 +65,40 @@ const StaySummaryCard = ({ stayData, costDetails, bookingDetails, averageRating,
         <FaPaw color={GOLD_PRIMARY} style={{ marginRight: '10px' }} /> Booking Summary
       </h2>
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-<div>
-  <h3 style={{ 
-    margin: '0 0 5px 0', 
-    color: TEXT_BLACK, 
-    fontSize: '32px', 
-    fontWeight: '800', 
-    letterSpacing: '-0.5px', // Modern tight kerning for high-end brands
-    textTransform: 'capitalize',
-    fontFamily: '"Playfair Display", "Georgia", serif', // High-end serif font look
-    lineHeight: '1.2'
-  }}>
-    {stayData.roomName}
-  </h3>
-  
-  <p style={{ 
-    margin: '0 0 12px 0', 
-    fontSize: '13px', 
-    color: GOLD_DARK, // Using gold for the address to separate it from the title
-    fontWeight: '600',
-    letterSpacing: '1px',
-    textTransform: 'uppercase', // Address in uppercase looks more like a luxury brand label
-    display: 'flex',
-    alignItems: 'center'
-  }}>
-    <span style={{ marginRight: '5px' }}>📍</span> {stayData.address}
-  </p>
+        <div>
+          <h3 style={{ 
+            margin: '0 0 5px 0', 
+            color: TEXT_BLACK, 
+            fontSize: '32px', 
+            fontWeight: '800', 
+            letterSpacing: '-0.5px', 
+            textTransform: 'capitalize',
+            fontFamily: '"Playfair Display", "Georgia", serif', 
+            lineHeight: '1.2'
+          }}>
+            {stayData.roomName}
+          </h3>
+          
+          <p style={{ 
+            margin: '0 0 12px 0', 
+            fontSize: '13px', 
+            color: GOLD_DARK, 
+            fontWeight: '600',
+            letterSpacing: '1px',
+            textTransform: 'uppercase', 
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <span style={{ marginRight: '5px' }}>📍</span> {stayData.address}
+          </p>
 
-  {/* Using dynamic rating logic from props */}
-  <div style={{ transform: 'scale(1.05)', transformOrigin: 'left' }}>
-    <RatingBadge 
-      rating={averageRating > 0 ? averageRating : (stayData.rating || 0)} 
-      count={totalReviews > 0 ? totalReviews : (stayData.reviewCount || 0)} 
-    />
-  </div>
-</div>
+          <div style={{ transform: 'scale(1.05)', transformOrigin: 'left' }}>
+            <RatingBadge 
+              rating={averageRating > 0 ? averageRating : (stayData.rating || 0)} 
+              count={totalReviews > 0 ? totalReviews : (stayData.reviewCount || 0)} 
+            />
+          </div>
+        </div>
       </div>
 
       <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: `1px dashed ${GOLD_PRIMARY}` }}>
@@ -153,7 +150,7 @@ const DateAndDogSelector = ({ bookingDetails, handleChange }) => {
         Select Dates & Guests
       </h3>
 
-      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '15px' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <label style={{ color: '#000000', fontSize: '13px', fontWeight: 'bold', marginBottom: '5px' }}>Check-In</label>
           <input 
@@ -175,6 +172,19 @@ const DateAndDogSelector = ({ bookingDetails, handleChange }) => {
             style={dateInputStyle} 
           />
         </div>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <label style={{ color: '#000000', fontSize: '13px', fontWeight: 'bold', marginBottom: '5px' }}>Number of Dogs</label>
+        <input 
+          type="number" 
+          name="numDogs" 
+          min="1" 
+          max="10" 
+          value={bookingDetails.numDogs} 
+          onChange={handleChange}
+          style={{ ...dateInputStyle, flex: 'none', width: '100px' }} 
+        />
       </div>
     </div>
   );
@@ -316,7 +326,6 @@ const DogStayBookingPage = () => {
       .catch(err => console.error("Error loading reviews", err));
   }, [id]);
 
-  // Review Calculations
   const averageRating = reviews.length
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
     : 0;
@@ -347,25 +356,6 @@ const DogStayBookingPage = () => {
 
   const handleChange = (e) => setBookingDetails({ ...bookingDetails, [e.target.name]: e.target.value });
 
-  const buildPricingSnapshot = () => {
-    if (!stayData) return null;
-    const pricePerDay = Number(stayData.pricePerDay);
-    const nights = days;
-    return {
-      pricingBreakup: {
-        fakePricePerDay: Math.round(pricePerDay * 1.2),
-        userPricePerDay: Math.round(pricePerDay * 0.9),
-        websiteCommissionPerDay: Math.round(pricePerDay * 0.1),
-        hostPricePerDay: Math.round(pricePerDay * 0.8),
-      },
-      totals: {
-        nights,
-        totalCommission: Math.round(pricePerDay * 0.1 * nights),
-        totalHostEarning: Math.round(pricePerDay * 0.8 * nights),
-      }
-    };
-  };
-
   const calculateTotalCost = () => {
     if (!stayData) {
       return { fakeAmt: 0, userAmt: 0, discount: 0, nights: days, finalPayable: 0 };
@@ -392,21 +382,25 @@ const DogStayBookingPage = () => {
     }
 
     try {
-      const orderRes = await axios.post(`${BACKEND_BASE_URL}/api/payment/create-order`, {
-        amount: costDetails.finalPayable,
-        currency: "INR",
-        receipt: `receipt_${Date.now()}`,
-      });
-      const { id: order_id, currency } = orderRes.data.order;
-      const userId = localStorage.getItem("userId");
-      const listingId = stayData?._id;
-      const hostId = stayData?.hostId;
       const { checkInDate, checkOutDate, numDogs, fullName, email, mobile } = bookingDetails;
-      const pricingSnapshot = buildPricingSnapshot();
+      const listingId = stayData?._id;
+
+      // 🛡️ FIX (Problem 1): Provide full verification metrics ahead of time during initial execution calls
+      const orderRes = await axios.post(`${BACKEND_BASE_URL}/api/payment/create-order`, {
+        listingId,
+        checkInDate,
+        checkOutDate,
+        numDogs,
+        fullName,
+        email,
+        mobile
+      });
+      
+      const { id: order_id, currency, amount: verifiedOrderAmount } = orderRes.data.order;
 
       const options = {
         key: "rzp_test_RhXTG9ZAbtd8Ra",
-        amount: costDetails.finalPayable * 100,
+        amount: verifiedOrderAmount, // 🛡️ FIX (Problem 12): Derive amount parameter map value context from order payload logic directly
         currency: currency,
         name: "Premium DogStay Booking",
         description: `Booking for ${stayData.roomName}`,
@@ -419,15 +413,13 @@ const DogStayBookingPage = () => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
               bookingData: {
-                userId, listingId, hostId, roomName: stayData?.roomName,
-                checkInDate, checkOutDate, numDogs, fullName, email, mobile,
-                pricePerDay: stayData?.pricePerDay,
-                additionalPetCharge: stayData?.additionalPetCharge,
-                couponDiscount: stayData?.couponDiscount,
-                instantDiscount: stayData?.instantDiscount,
-                taxRate: stayData?.taxRate,
-                totalAmount: costDetails.finalPayable,
-                ...pricingSnapshot,
+                listingId, 
+                checkInDate, 
+                checkOutDate, 
+                numDogs, 
+                fullName, 
+                email, 
+                mobile
               }
             },
             { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
@@ -461,25 +453,20 @@ const DogStayBookingPage = () => {
     }
 
     try {
-      const userId = localStorage.getItem("userId");
       const listingId = stayData?._id;
-      const hostId = stayData?.hostId;
       const { checkInDate, checkOutDate, numDogs, fullName, email, mobile } = bookingDetails;
-      const pricingSnapshot = buildPricingSnapshot();
 
       const cashBookingRes = await axios.post(
         `${BACKEND_BASE_URL}/api/payment/cash-booking`,
         {
           bookingData: {
-            userId, listingId, hostId, roomName: stayData?.roomName,
-            checkInDate, checkOutDate, numDogs, fullName, email, mobile,
-            pricePerDay: stayData?.pricePerDay,
-            additionalPetCharge: stayData?.additionalPetCharge,
-            couponDiscount: stayData?.couponDiscount,
-            instantDiscount: stayData?.instantDiscount,
-            taxRate: stayData?.taxRate,
-            totalAmount: costDetails.finalPayable,
-            ...pricingSnapshot
+            listingId, 
+            checkInDate, 
+            checkOutDate, 
+            numDogs, 
+            fullName, 
+            email, 
+            mobile
           }
         },
         { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
