@@ -15,6 +15,15 @@ const CARD_BG = '#ffffff';
 const BOX_STYLE = { boxSizing: 'border-box' };
 const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
 
+// --- Helper Date Formatting Functions ---
+const formatDate = (date) => {
+  return date.toISOString().split("T")[0];
+};
+
+const today = new Date();
+const tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
+
 // --- Helper Components ---
 const RatingBadge = ({ rating, count }) => (
   <div style={{
@@ -157,6 +166,7 @@ const DateAndDogSelector = ({ bookingDetails, handleChange }) => {
             type="date" 
             name="checkInDate" 
             value={bookingDetails.checkInDate} 
+            min={formatDate(today)}
             onChange={handleChange}
             style={dateInputStyle} 
           />
@@ -168,6 +178,7 @@ const DateAndDogSelector = ({ bookingDetails, handleChange }) => {
             type="date" 
             name="checkOutDate" 
             value={bookingDetails.checkOutDate} 
+            min={bookingDetails.checkInDate}
             onChange={handleChange}
             style={dateInputStyle} 
           />
@@ -274,7 +285,7 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
         Premium Price Breakdown
       </h3>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
+      <div style={{ display: 'flex', justifycontent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
         <span>Original Price</span>
         <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>
           ₹{costDetails.fakeAmt}
@@ -332,13 +343,13 @@ const DogStayBookingPage = () => {
   const totalReviews = reviews.length;
 
   const [bookingDetails, setBookingDetails] = useState({
-    checkInDate: '2025-11-10',
-    checkOutDate: '2025-11-11',
+    checkInDate: formatDate(today),
+    checkOutDate: formatDate(tomorrow),
     numDogs: 1,
-    fullName: '',
-    email: '',
-    mobile: '',
-    paymentMethod: 'Card',
+    fullName: "",
+    email: "",
+    mobile: "",
+    paymentMethod: "Card",
   });
 
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -385,7 +396,6 @@ const DogStayBookingPage = () => {
       const { checkInDate, checkOutDate, numDogs, fullName, email, mobile } = bookingDetails;
       const listingId = stayData?._id;
 
-      // 🛡️ FIX (Problem 1): Provide full verification metrics ahead of time during initial execution calls
       const orderRes = await axios.post(`${BACKEND_BASE_URL}/api/payment/create-order`, {
         listingId,
         checkInDate,
@@ -400,7 +410,7 @@ const DogStayBookingPage = () => {
 
       const options = {
         key: "rzp_test_RhXTG9ZAbtd8Ra",
-        amount: verifiedOrderAmount, // 🛡️ FIX (Problem 12): Derive amount parameter map value context from order payload logic directly
+        amount: verifiedOrderAmount, 
         currency: currency,
         name: "Premium DogStay Booking",
         description: `Booking for ${stayData.roomName}`,
