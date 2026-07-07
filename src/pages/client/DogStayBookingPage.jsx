@@ -375,6 +375,8 @@ const DogStayBookingPage = () => {
       const { checkInDate, checkOutDate, numDogs, fullName, email, mobile } = bookingDetails;
       const listingId = stayData?._id;
 
+      // Note: If create-order endpoint also checks authentication context, 
+      // pass { withCredentials: true } here as a third parameter if needed.
       const orderRes = await axios.post(`${BACKEND_BASE_URL}/api/payment/create-order`, {
         listingId,
         checkInDate,
@@ -411,7 +413,7 @@ const DogStayBookingPage = () => {
                 mobile
               }
             },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+            { withCredentials: true }
           );
 
           if (verifyRes.data.success) {
@@ -458,7 +460,7 @@ const DogStayBookingPage = () => {
             mobile
           }
         },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+        { withCredentials: true }
       );
 
       if (cashBookingRes.data.success) {
