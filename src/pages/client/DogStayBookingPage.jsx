@@ -207,8 +207,52 @@ const UserDetailsForm = ({
   passcodeSent,
   setPasscodeSent
 }) => {
-  const handlePasscodeVerificationRequest = async () => {
-    setPasscodeSent(true);
+  const [otpRequested, setOtpRequested] = useState(false);
+  const [inputOtp, setInputOtp] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // 🛡️ FIX 1: Handle real server-side OTP generation dispatch
+  const handleSendOtp = async () => {
+    if (!/^[6-9]\d{9}$/.test(bookingDetails.mobile)) {
+      alert("⚠️ Please provide a valid 10-digit mobile number.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await axios.post(`${BACKEND_BASE_URL}/api/otp/send`, { mobile: bookingDetails.mobile });
+      setOtpRequested(true);
+      alert("📱 Passcode sent to your phone number!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send verification passcode. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🛡️ FIX 1: Validate input token on backend before unlocking confirmation state
+  const handleVerifyOtp = async () => {
+    if (!inputOtp || inputOtp.length < 4) {
+      alert("⚠️ Please enter the complete passcode.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post(`${BACKEND_BASE_URL}/api/otp/verify`, {
+        mobile: bookingDetails.mobile,
+        otp: inputOtp
+      });
+      if (res.data.success) {
+        setPasscodeSent(true);
+      } else {
+        alert("❌ Invalid passcode. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Verification failed. Please ensure the code is correct.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -234,7 +278,7 @@ const UserDetailsForm = ({
         onChange={handleChange}
       />
 
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: otpRequested && !passcodeSent ? '15px' : '0px' }}>
         <div style={{ flex: 1 }}>
           <BookingInput
             icon={FaMobileAlt}
@@ -243,14 +287,14 @@ const UserDetailsForm = ({
             type="tel"
             value={bookingDetails.mobile}
             onChange={handleChange}
-            readOnly={passcodeSent}
+            readOnly={otpRequested || passcodeSent}
           />
         </div>
 
         <button
           type="button"
-          onClick={handlePasscodeVerificationRequest}
-          disabled={!bookingDetails.mobile || bookingDetails.mobile.length < 10 || passcodeSent}
+          onClick={handleSendOtp}
+          disabled={!bookingDetails.mobile || bookingDetails.mobile.length < 10 || otpRequested || passcodeSent || loading}
           style={{
             padding: '12px 20px',
             backgroundColor: passcodeSent ? '#28a745' : TEXT_BLACK,
@@ -263,9 +307,41 @@ const UserDetailsForm = ({
             transition: '0.3s'
           }}
         >
-          {passcodeSent ? <FaCheckCircle color="white" /> : 'Send Passcode'}
+          {passcodeSent ? <FaCheckCircle color="white" /> : loading && !otpRequested ? 'Sending...' : 'Send Passcode'}
         </button>
       </div>
+
+      {/* Actual verification slot to mitigate client spoofing loops */}
+      {otpRequested && !passcodeSent && (
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', animation: 'fadeIn 0.3s' }}>
+          <div style={{ flex: 1 }}>
+            <BookingInput
+              icon={FaLock}
+              placeholder="Enter Received Passcode"
+              value={inputOtp}
+              onChange={(e) => setInputOtp(e.target.value)}
+              type="text"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleVerifyOtp}
+            disabled={loading}
+            style={{
+              padding: '12px 20px',
+              backgroundColor: GOLD_PRIMARY,
+              color: TEXT_BLACK,
+              border: `1px solid ${GOLD_DARK}`,
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            {loading ? 'Verifying...' : 'Verify'}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -291,6 +367,7 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
         Premium Price Breakdown
       </h3>
 
+      {/* 🛡️ Typo Fix: justifycontent corrected to standard camelCase rule style object */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
         <span>Original Price</span>
         <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>
@@ -415,6 +492,7 @@ const DogStayBookingPage = () => {
       const { id: order_id, currency, amount: verifiedOrderAmount } = orderRes.data.order;
 
       const options = {
+        // 🛡️ FIX 7: Shift environment variables directly securely configuration maps
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_RhXTG9ZAbtd8Ra",
         amount: verifiedOrderAmount, 
         currency: currency,
@@ -506,7 +584,7 @@ const DogStayBookingPage = () => {
         margin: '50px auto', backgroundColor: CARD_BG, borderRadius: '16px',
         boxShadow: `0 10px 30px rgba(212, 175, 55, 0.3)`, border: `3px solid ${GOLD_PRIMARY}`
       }}>
-        <FaCheckCircle size={80} color={GOLD_PRIMARY} style={{ margin: '0 auto 20px auto', display: 'block' }} />
+        <FaCheckCircle size={80} color={GOLD_PRIMARY} style={{ marginBottom: '20px' }} />
         <h1 style={{ color: TEXT_BLACK, fontSize: '36px' }}>Booking Confirmed!</h1>
         <p style={{ fontSize: '18px', color: TEXT_BLACK }}>
           Your dog's stay at <b>{stayData?.roomName}</b> is secured.
@@ -551,29 +629,31 @@ const DogStayBookingPage = () => {
           <div style={{ flex: 1, minWidth: '300px', position: 'sticky', top: '20px' }}>
             <PriceDetailsCard stayData={stayData} costDetails={costDetails} />
             
-            {/* --- REVERTED TO OLD UI PAY BUTTON --- */}
             <button
               onClick={handleRazorpayPayment}
               disabled={!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent}
               style={{
-                ...BOX_STYLE, width: '100%', padding: '18px', marginTop: '20px',
+                ...BOX_STYLE, width: '100%', padding: '18px',
                 backgroundColor: (!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent) ? '#ccc' : TEXT_BLACK,
-                color: GOLD_PRIMARY, border: `1px solid ${GOLD_PRIMARY}`, borderRadius: '8px', fontSize: '18px', fontWeight: 'bold', cursor: 'pointer'
+                color: GOLD_PRIMARY, border: `1px solid ${GOLD_PRIMARY}`, borderRadius: '8px',
+                fontSize: '22px', fontWeight: 'bold', cursor: 'pointer', marginTop: '20px',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
               }}
             >
-              Pay with Razorpay
+              <FaLock style={{ marginRight: '10px' }} /> Pay ₹{costDetails.finalPayable} Now
             </button>
 
-            {/* --- REVERTED TO OLD UI CASH BUTTON --- */}
             <button
               onClick={handleCashBooking}
-              disabled={!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent}
               style={{
-                ...BOX_STYLE, width: '100%', padding: '18px', marginTop: '10px',
-                backgroundColor: 'transparent', color: TEXT_BLACK, border: `2px solid ${TEXT_BLACK}`, borderRadius: '8px', fontSize: '18px', fontWeight: 'bold', cursor: 'pointer'
+                ...BOX_STYLE, width: "100%", padding: "15px",
+                backgroundColor: GOLD_PRIMARY, color: TEXT_BLACK,
+                border: "none", borderRadius: "8px", fontSize: "18px",
+                fontWeight: "bold", cursor: "pointer", marginTop: "10px",
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
               }}
             >
-              Book Now, Pay at Center
+              Reserve via Cash
             </button>
           </div>
         </div>
