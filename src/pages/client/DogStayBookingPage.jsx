@@ -203,58 +203,8 @@ const DateAndDogSelector = ({ bookingDetails, handleChange }) => {
 
 const UserDetailsForm = ({
   bookingDetails,
-  handleChange,
-  passcodeSent,
-  setPasscodeSent
+  handleChange
 }) => {
-  const [otpRequested, setOtpRequested] = useState(false);
-  const [inputOtp, setInputOtp] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  // 🛡️ FIX 1: Handle real server-side OTP generation dispatch
-  const handleSendOtp = async () => {
-    if (!/^[6-9]\d{9}$/.test(bookingDetails.mobile)) {
-      alert("⚠️ Please provide a valid 10-digit mobile number.");
-      return;
-    }
-    setLoading(true);
-    try {
-      await axios.post(`${BACKEND_BASE_URL}/api/otp/send`, { mobile: bookingDetails.mobile });
-      setOtpRequested(true);
-      alert("📱 Passcode sent to your phone number!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to send verification passcode. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🛡️ FIX 1: Validate input token on backend before unlocking confirmation state
-  const handleVerifyOtp = async () => {
-    if (!inputOtp || inputOtp.length < 4) {
-      alert("⚠️ Please enter the complete passcode.");
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await axios.post(`${BACKEND_BASE_URL}/api/otp/verify`, {
-        mobile: bookingDetails.mobile,
-        otp: inputOtp
-      });
-      if (res.data.success) {
-        setPasscodeSent(true);
-      } else {
-        alert("❌ Invalid passcode. Please try again.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Verification failed. Please ensure the code is correct.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div style={{ marginBottom: '30px' }}>
       <h3 style={{ color: TEXT_BLACK, borderBottom: `2px solid ${GOLD_PRIMARY}`, paddingBottom: '10px', marginBottom: '20px' }}>
@@ -278,7 +228,7 @@ const UserDetailsForm = ({
         onChange={handleChange}
       />
 
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: otpRequested && !passcodeSent ? '15px' : '0px' }}>
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '0px' }}>
         <div style={{ flex: 1 }}>
           <BookingInput
             icon={FaMobileAlt}
@@ -287,61 +237,9 @@ const UserDetailsForm = ({
             type="tel"
             value={bookingDetails.mobile}
             onChange={handleChange}
-            readOnly={otpRequested || passcodeSent}
           />
         </div>
-
-        <button
-          type="button"
-          onClick={handleSendOtp}
-          disabled={!bookingDetails.mobile || bookingDetails.mobile.length < 10 || otpRequested || passcodeSent || loading}
-          style={{
-            padding: '12px 20px',
-            backgroundColor: passcodeSent ? '#28a745' : TEXT_BLACK,
-            color: GOLD_PRIMARY,
-            border: `1px solid ${GOLD_PRIMARY}`,
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            transition: '0.3s'
-          }}
-        >
-          {passcodeSent ? <FaCheckCircle color="white" /> : loading && !otpRequested ? 'Sending...' : 'Send Passcode'}
-        </button>
       </div>
-
-      {/* Actual verification slot to mitigate client spoofing loops */}
-      {otpRequested && !passcodeSent && (
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', animation: 'fadeIn 0.3s' }}>
-          <div style={{ flex: 1 }}>
-            <BookingInput
-              icon={FaLock}
-              placeholder="Enter Received Passcode"
-              value={inputOtp}
-              onChange={(e) => setInputOtp(e.target.value)}
-              type="text"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={handleVerifyOtp}
-            disabled={loading}
-            style={{
-              padding: '12px 20px',
-              backgroundColor: GOLD_PRIMARY,
-              color: TEXT_BLACK,
-              border: `1px solid ${GOLD_DARK}`,
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            {loading ? 'Verifying...' : 'Verify'}
-          </button>
-        </div>
-      )}
     </div>
   );
 };
@@ -367,7 +265,6 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
         Premium Price Breakdown
       </h3>
 
-      {/* 🛡️ Typo Fix: justifycontent corrected to standard camelCase rule style object */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
         <span>Original Price</span>
         <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>
@@ -437,7 +334,6 @@ const DogStayBookingPage = () => {
 
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [days, setDays] = useState(1);
-  const [passcodeSent, setPasscodeSent] = useState(false);
 
   useEffect(() => {
     const date1 = new Date(bookingDetails.checkInDate);
@@ -470,8 +366,8 @@ const DogStayBookingPage = () => {
       alert("⚠️ Please fill in all your contact details before payment.");
       return;
     }
-    if (!passcodeSent) {
-      alert("📱 Please verify your mobile number first.");
+    if (!/^[6-9]\d{9}$/.test(bookingDetails.mobile)) {
+      alert("Please enter a valid mobile number.");
       return;
     }
 
@@ -492,7 +388,6 @@ const DogStayBookingPage = () => {
       const { id: order_id, currency, amount: verifiedOrderAmount } = orderRes.data.order;
 
       const options = {
-        // 🛡️ FIX 7: Shift environment variables directly securely configuration maps
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_RhXTG9ZAbtd8Ra",
         amount: verifiedOrderAmount, 
         currency: currency,
@@ -541,8 +436,8 @@ const DogStayBookingPage = () => {
       alert("⚠️ Please fill in all your contact details before confirming the booking.");
       return;
     }
-    if (!passcodeSent) {
-      alert("📱 Please verify your mobile number first.");
+    if (!/^[6-9]\d{9}$/.test(bookingDetails.mobile)) {
+      alert("Please enter a valid mobile number.");
       return;
     }
 
@@ -621,8 +516,6 @@ const DogStayBookingPage = () => {
             <UserDetailsForm
               bookingDetails={bookingDetails}
               handleChange={handleChange}
-              passcodeSent={passcodeSent}
-              setPasscodeSent={setPasscodeSent}
             />
           </div>
 
@@ -631,10 +524,10 @@ const DogStayBookingPage = () => {
             
             <button
               onClick={handleRazorpayPayment}
-              disabled={!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent}
+              disabled={!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile}
               style={{
                 ...BOX_STYLE, width: '100%', padding: '18px',
-                backgroundColor: (!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent) ? '#ccc' : TEXT_BLACK,
+                backgroundColor: (!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile) ? '#ccc' : TEXT_BLACK,
                 color: GOLD_PRIMARY, border: `1px solid ${GOLD_PRIMARY}`, borderRadius: '8px',
                 fontSize: '22px', fontWeight: 'bold', cursor: 'pointer', marginTop: '20px',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
