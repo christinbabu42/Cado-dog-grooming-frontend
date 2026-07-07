@@ -207,10 +207,7 @@ const UserDetailsForm = ({
   passcodeSent,
   setPasscodeSent
 }) => {
-  // 🛡️ FIX 1: Verification handling routing setup
   const handlePasscodeVerificationRequest = async () => {
-    // Implement API dispatch logic here: 
-    // e.g., await axios.post('/api/otp/send', { mobile: bookingDetails.mobile });
     setPasscodeSent(true);
   };
 
@@ -221,7 +218,6 @@ const UserDetailsForm = ({
       </h3>
 
       <BookingInput
-        Circle
         icon={FaUser}
         placeholder="Full Name"
         name="fullName"
@@ -295,7 +291,6 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
         Premium Price Breakdown
       </h3>
 
-      {/* 🛡️ FIX Minor Bug: Modified layout alignments to use standard justifyContent properties */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
         <span>Original Price</span>
         <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>
@@ -420,7 +415,6 @@ const DogStayBookingPage = () => {
       const { id: order_id, currency, amount: verifiedOrderAmount } = orderRes.data.order;
 
       const options = {
-        // 🛡️ FIX 7: Swapped hardcoded key with environment routing configurations
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_RhXTG9ZAbtd8Ra",
         amount: verifiedOrderAmount, 
         currency: currency,
@@ -444,7 +438,7 @@ const DogStayBookingPage = () => {
                 mobile
               }
             },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } } // Note: Consider moving auth token storage to HttpOnly Secure cookies to address item 8 in the future.
+            { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
           );
 
           if (verifyRes.data.success) {
@@ -557,6 +551,7 @@ const DogStayBookingPage = () => {
           <div style={{ flex: 1, minWidth: '300px', position: 'sticky', top: '20px' }}>
             <PriceDetailsCard stayData={stayData} costDetails={costDetails} />
             
+            {/* --- REVERTED TO OLD UI PAY BUTTON --- */}
             <button
               onClick={handleRazorpayPayment}
               disabled={!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent}
@@ -569,6 +564,7 @@ const DogStayBookingPage = () => {
               Pay with Razorpay
             </button>
 
+            {/* --- REVERTED TO OLD UI CASH BUTTON --- */}
             <button
               onClick={handleCashBooking}
               disabled={!bookingDetails.fullName || !bookingDetails.email || !bookingDetails.mobile || !passcodeSent}
