@@ -29,18 +29,8 @@ import GrBookingPage from './GrBookingPage.jsx';
 ======================= */
 const axiosInstance = axios.create({
     baseURL: "https://cado-dog-grooming-backend.onrender.com/api",
+    withCredentials: true,
 });
-
-axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem("authToken");
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
 
 const AdminDashboard = () => {
     const { isMobile } = useWindowWidth();
@@ -55,16 +45,6 @@ const AdminDashboard = () => {
     }, [isMobile]);
 
     const location = useLocation();
-
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const token = params.get("token");
-
-        if (token) {
-            localStorage.setItem("authToken", token);
-            window.history.replaceState({}, document.title, "/admin");
-        }
-    }, [location]);
 
     useEffect(() => {
         if (activePage === 'Dashboard') {
@@ -95,8 +75,11 @@ const AdminDashboard = () => {
 
         try {
             const response = await fetch(url, {
-                method: approve ? 'PUT' : 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                method: approve ? "PUT" : "PATCH",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: approve ? undefined : JSON.stringify(body),
             });
 
