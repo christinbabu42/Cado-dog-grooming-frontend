@@ -9,11 +9,34 @@ const CARD_BG = '#ffffff';
 const BOX_STYLE = { boxSizing: 'border-box' };
 const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
 
-// --- CENTRAL AXIOS INSTANCE WITH CREDENTIALS ---
+// Helper function to extract a specific cookie client-side
+const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+};
+
+// --- CENTRAL AXIOS INSTANCE WITH CREDENTIALS & AUTOLOAD HEADERS ---
 const api = axios.create({
     baseURL: `${BACKEND_BASE_URL}/api`,
     withCredentials: true,
 });
+
+// Request Interceptor to dynamically inject the token into headers before every API call
+api.interceptors.request.use(
+    (config) => {
+        // Fallback hierarchy: checks cookies named 'token', 'authToken', or localStorage
+        const token = getCookie('token') || getCookie('authToken') || localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 // Format date
 const formatDate = (dateString) => {
