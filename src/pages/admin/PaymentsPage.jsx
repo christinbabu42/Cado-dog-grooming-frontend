@@ -92,7 +92,7 @@ const PaymentsPage = ({ isMobile }) => {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const res = await api.get('/roombookings/all-payments');
+                const res = await api.get('/payment/all-payments');
                 setBookings(res.data.bookings || []);
             } catch (err) {
                 console.error("Error fetching payment bookings:", err);
@@ -106,7 +106,7 @@ const PaymentsPage = ({ isMobile }) => {
     const deleteBooking = async (id) => {
         if (!window.confirm("Are you sure you want to delete this booking?")) return;
         try {
-            const res = await api.delete(`/roombookings/delete/${id}`);
+            const res = await api.delete(`/payment/delete/${id}`);
             if (res.data.success) {
                 setBookings(bookings.filter(b => b._id !== id));
                 alert("Booking deleted successfully!");
