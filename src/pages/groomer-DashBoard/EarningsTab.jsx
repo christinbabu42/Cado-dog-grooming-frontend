@@ -69,35 +69,30 @@ const EarningsTab = () => {
                   A/C: ****{g.bankDetails.accountNumber?.slice(-4)}
                 </p>
 
-<button
-  className="btn-payout"
-onClick={async () => {
-  try {
-    const token = localStorage.getItem("authToken");
-    const res = await axiosInstance.post(
-      `/api/payout/grstaff/pay-groomer/${g.staffId}`,
-      { amount: g.totalEarning },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    
+                <button
+                  className="btn-payout"
+                  onClick={async () => {
+                    try {
+                      const res = await axiosInstance.post(
+                        `/api/payout/grstaff/pay-groomer/${g.staffId}`,
+                        { amount: g.totalEarning }
+                      );
 
-    if (res.data.success) {
-  alert("Sandbox payout triggered!");
-  const resUpdated = await axiosInstance.get("/api/groomer-Earnings/admin/all");
-  if (resUpdated.data.success) setGroomers(resUpdated.data.groomers);
-}
-
-    else alert("Failed: " + res.data.message);
-  } catch (err) {
-    console.error(err);
-    alert("Payout failed (sandbox)");
-  }
-}}
-
->
-  Pay Groomer
-</button>
-
+                      if (res.data.success) {
+                        alert("Sandbox payout triggered!");
+                        const resUpdated = await axiosInstance.get("/api/groomer-Earnings/admin/all");
+                        if (resUpdated.data.success) setGroomers(resUpdated.data.groomers);
+                      } else {
+                        alert("Failed: " + res.data.message);
+                      }
+                    } catch (err) {
+                      console.error(err);
+                      alert("Payout failed (sandbox)");
+                    }
+                  }}
+                >
+                  Pay Groomer
+                </button>
               </>
             ) : (
               <p className="warning-text">

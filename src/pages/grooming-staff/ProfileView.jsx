@@ -3,7 +3,7 @@ import {
   Mail, Phone, CreditCard, MapPin, ShieldCheck,
   Edit3, ArrowLeft, CheckCircle2, Eye, EyeOff
 } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import "./ProfileView.css";
 
 const ProfileView = ({ staffProfile: initialProfile }) => {
@@ -44,16 +44,15 @@ const ProfileView = ({ staffProfile: initialProfile }) => {
     }
 
     try {
-      const token = localStorage.getItem("authToken");
-      const { data } = await axios.put(
-        "https://cado-dog-grooming-backend.onrender.com/api/user/bank-details",
+      // Utilizing centralized axiosInstance with HttpOnly credentials automatically handled
+      const { data } = await axiosInstance.put(
+        "/api/user/bank-details",
         {
           accountHolder: bankDetails.accountHolder,
           bankName: bankDetails.bankName,
           ifsc: bankDetails.ifsc,
           accountNumber: bankDetails.accountNumber,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
+        }
       );
 
       if (data.success) {
@@ -132,7 +131,7 @@ const ProfileView = ({ staffProfile: initialProfile }) => {
       {showBankForm && (
         <div className="side-form-container">
           <div className="form-header">
-            <button className="btn-close-form" onClick={() => setShowBankForm(false)}><ArrowLeft size={18} /></button>
+            <button className="btn-close-form" type="button" onClick={() => setShowBankForm(false)}><ArrowLeft size={18} /></button>
             <h3>Bank Settings</h3>
           </div>
           <form className="bank-form" onSubmit={handleSaveBankDetails}>

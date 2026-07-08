@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TrendingUp, Wallet, ChevronRight, Calendar } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import "./DashboardView.css"; 
 
 const DashboardView = ({ staffProfile, earnings: initialEarnings }) => {
@@ -15,11 +15,9 @@ const DashboardView = ({ staffProfile, earnings: initialEarnings }) => {
       
       setLoading(true);
       try {
-        const token = localStorage.getItem("authToken");
-        // API call includes the range parameter to filter data on the backend
-        const { data } = await axios.get(
-          `https://cado-dog-grooming-backend.onrender.com/api/groomer/staff/earnings/${staffProfile._id}?range=${timeRange}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+        // API call includes the range parameter to filter data on the backend using axiosInstance
+        const { data } = await axiosInstance.get(
+          `/api/groomer/staff/earnings/${staffProfile._id}?range=${timeRange}`
         );
 
         if (data.success) {

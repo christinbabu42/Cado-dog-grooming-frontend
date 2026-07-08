@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import { LayoutDashboard, Wallet, Users, Menu, X, LogOut } from "lucide-react";
 import DashboardView from "./DashboardView";
 import PayoutsView from "./PayoutsView";
@@ -17,37 +17,33 @@ const StaffEarningsPage = () => {
   useEffect(() => {
     const initStaff = async () => {
       try {
+        // Clean URL query token if arriving from an external redirect link link
         const queryParams = new URLSearchParams(window.location.search);
         const tokenFromUrl = queryParams.get("token");
-        let token = tokenFromUrl || localStorage.getItem("authToken");
-
-        if (!token) {
-          setError("Session expired. Please login again.");
-          setLoading(false);
-          return;
-        }
 
         if (tokenFromUrl) {
-          localStorage.setItem("authToken", tokenFromUrl);
           window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        const { data } = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Relying safely on central HttpOnly session cookies via shared axiosInstance
+        const { data } = await axiosInstance.get("/api/user/me");
 
         if (data.role === "grstaff" && data.staffProfile) {
           setStaffProfile(data.staffProfile);
-          const res = await axios.get(
-            `https://cado-dog-grooming-backend.onrender.com/api/groomer/staff/earnings/${data.staffProfile._id}`,
-            { headers: { Authorization: `Bearer ${token}` } }
+          const res = await axiosInstance.get(
+            `/api/groomer/staff/earnings/${data.staffProfile._id}`
           );
           if (res.data.success) setEarnings(res.data);
         } else {
           setError("Access Denied: Staff only.");
         }
       } catch (err) {
-        setError("Unable to connect to server.");
+        // Catch unauthorized or validation failures from server
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          setError("Session expired. Please login again.");
+        } else {
+          setError("Unable to connect to server.");
+        }
       } finally {
         setLoading(false);
       }
@@ -64,6 +60,7 @@ const StaffEarningsPage = () => {
   };
 
   if (loading) return <div className="loader-container"><div className="loader"></div></div>;
+  if (error) return <div className="error-container" style={{ padding: "40px", textAlign: "center", color: "red" }}><p>{error}</p></div>;
 
   return (
     <div className="dashboard-container">

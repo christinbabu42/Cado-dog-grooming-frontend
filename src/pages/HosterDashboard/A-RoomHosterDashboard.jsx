@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import {
   FaDog, FaTachometerAlt, FaHome, FaBook, FaMoneyCheckAlt, FaWallet,
   FaStar, FaBell, FaUserCog, FaBars, FaTimes, FaPlusCircle
@@ -68,16 +68,13 @@ const RoomHosterDashboard = () => {
     const loadHostData = async () => {
       try {
         const userId = localStorage.getItem("userId");
-        const token = localStorage.getItem("token") || localStorage.getItem("authToken");
 
-        if (!userId || !token) {
+        if (!userId) {
           navigate("/host-login");
           return;
         }
 
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-
-        const bookingRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/hostBookings/host/${userId}`, config);
+        const bookingRes = await axiosInstance.get(`/api/hostBookings/host/${userId}`);
         const bookings = bookingRes.data.success ? bookingRes.data.bookings : [];
 
         const lastSeen = localStorage.getItem("lastSeenBookingsAt");
@@ -105,25 +102,28 @@ const RoomHosterDashboard = () => {
           }, {})
         };
 
-        const reviewRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/host-reviews/host/${userId}`, config);
+        const reviewRes = await axiosInstance.get(`/api/host-reviews/host/${userId}`);
         const reviews = reviewRes.data.reviews || [];
 
-        const hostRes = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/hosts/profile", config);
+        const hostRes = await axiosInstance.get("/api/hosts/profile");
         const hostProfile = hostRes.data.success ? hostRes.data.host : {};
 
-        const roomRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/rooms/user/${userId}`, config);
+        const roomRes = await axiosInstance.get(`/api/rooms/user/${userId}`);
         const rooms = roomRes.data.rooms || [];
 
         if (rooms.length) {
           localStorage.setItem("hostListingIds", JSON.stringify(rooms.map(r => r._id)));
         }
 
-        const walletRes = await axios.get(`https://cado-dog-grooming-backend.onrender.com/api/wallet/summary/${userId}`, config);
+        const walletRes = await axiosInstance.get(`/api/wallet/summary/${userId}`);
         const wallet = walletRes.data.wallet || {};
 
         setData({ host: hostProfile, rooms, bookings, reviews, wallet, summary });
       } catch (err) {
         console.error("Dashboard Load Error:", err.response?.data || err.message);
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          navigate("/host-login");
+        }
       } finally {
         setLoading(false);
       }
@@ -139,9 +139,7 @@ const RoomHosterDashboard = () => {
 
   const handleMarkCommissionPaid = async (bookingId) => {
     try {
-      const token = localStorage.getItem("token") || localStorage.getItem("authToken");
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      const res = await axios.put(`https://cado-dog-grooming-backend.onrender.com/api/hostBookings/commissionPaid/${bookingId}`, {}, config);
+      const res = await axiosInstance.put(`/api/hostBookings/commissionPaid/${bookingId}`, {});
 
       if (res.data.success) {
         setData(prev => {
