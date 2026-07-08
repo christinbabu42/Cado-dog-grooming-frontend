@@ -13,24 +13,37 @@ const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
 const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+    if (parts.length === 2) {
+        const extracted = parts.pop().split(';').shift();
+        // Prevent sending literal string equivalents of empty values
+        if (extracted === 'null' || extracted === 'undefined' || !extracted) return null;
+        return extracted;
+    }
     return null;
 };
 
-// --- CENTRAL AXIOS INSTANCE WITH CREDENTIALS & AUTOLOAD HEADERS ---
+// --- CENTRAL AXIOS INSTANCE WITH CREDENTIALS ---
 const api = axios.create({
     baseURL: `${BACKEND_BASE_URL}/api`,
     withCredentials: true,
 });
 
-// Request Interceptor to dynamically inject the token into headers before every API call
+// Request Interceptor to format and inject headers securely
 api.interceptors.request.use(
     (config) => {
-        // Fallback hierarchy: checks cookies named 'token', 'authToken', or localStorage
-        const token = getCookie('token') || getCookie('authToken') || localStorage.getItem('token');
+        let token = getCookie('token') || getCookie('authToken');
+        
+        if (!token) {
+            const localToken = localStorage.getItem('token') || localStorage.getItem('authToken');
+            if (localToken && localToken !== 'null' && localToken !== 'undefined') {
+                token = localToken;
+            }
+        }
+
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+        
         return config;
     },
     (error) => {
