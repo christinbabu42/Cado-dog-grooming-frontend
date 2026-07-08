@@ -9,6 +9,12 @@ const CARD_BG = '#ffffff';
 const BOX_STYLE = { boxSizing: 'border-box' };
 const BACKEND_BASE_URL = 'https://cado-dog-grooming-backend.onrender.com';
 
+// --- CENTRAL AXIOS INSTANCE WITH CREDENTIALS ---
+const api = axios.create({
+    baseURL: `${BACKEND_BASE_URL}/api`,
+    withCredentials: true,
+});
+
 // Format date
 const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
@@ -50,10 +56,7 @@ const PaymentsPage = ({ isMobile }) => {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const token = localStorage.getItem("authToken");
-                const res = await axios.get(`${BACKEND_BASE_URL}/api/roombookings/all-payments`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const res = await api.get('/roombookings/all-payments');
                 setBookings(res.data.bookings || []);
             } catch (err) {
                 console.error("Error fetching payment bookings:", err);
@@ -67,10 +70,7 @@ const PaymentsPage = ({ isMobile }) => {
     const deleteBooking = async (id) => {
         if (!window.confirm("Are you sure you want to delete this booking?")) return;
         try {
-            const token = localStorage.getItem("authToken");
-            const res = await axios.delete(`${BACKEND_BASE_URL}/api/roombookings/delete/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await api.delete(`/roombookings/delete/${id}`);
             if (res.data.success) {
                 setBookings(bookings.filter(b => b._id !== id));
                 alert("Booking deleted successfully!");
@@ -85,6 +85,7 @@ const PaymentsPage = ({ isMobile }) => {
 
     return (
         <div style={{ ...BOX_STYLE, padding: isMobile ? '20px' : '40px', backgroundColor: OYO_BG_LIGHT, minHeight: '100vh' }}>
+            {/* Header Section */}
             <h2 style={{ color: OYO_SECONDARY, fontSize: isMobile ? '28px' : '36px', marginBottom: '10px' }}>
                 <FaMoneyBillWave color={OYO_PRIMARY} style={{ marginRight: '15px' }} /> Payments Dashboard
             </h2>
