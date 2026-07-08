@@ -4,6 +4,12 @@ import axios from "axios";
 
 const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com"; // adjust when needed
 
+// --- CENTRAL AXIOS INSTANCE WITH CREDENTIALS ---
+const api = axios.create({
+  baseURL: `${BACKEND_BASE_URL}/api`,
+  withCredentials: true,
+});
+
 // --- PREMIUM THEME CONSTANTS ---
 const GOLD_PRIMARY = "#D4AF37";
 const GOLD_DARK = "#B8860B";
@@ -25,11 +31,7 @@ const UsersPage = ({ isMobile }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("authToken");
-
-        const res = await axios.get(`${BACKEND_BASE_URL}/api/user/all`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/user/all");
 
         setUsers(res.data.users || []);
         setFilteredUsers(res.data.users || []);
@@ -56,15 +58,7 @@ const UsersPage = ({ isMobile }) => {
       return;
 
     try {
-      const token = localStorage.getItem("authToken");
-
-      const res = await axios.put(
-        `${BACKEND_BASE_URL}/api/user/status/${userId}`,
-        { status: newStatus },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+      const res = await api.put(`/user/status/${userId}`, { status: newStatus });
 
       if (res.data.success) {
         setUsers((prev) =>
@@ -83,15 +77,7 @@ const UsersPage = ({ isMobile }) => {
       return;
 
     try {
-      const token = localStorage.getItem("authToken");
-
-      const res = await axios.put(
-        `${BACKEND_BASE_URL}/api/user/role/${userId}`,
-        { role: newRole },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.put(`/user/role/${userId}`, { role: newRole });
 
       if (res.data.success) {
         setUsers((prev) =>
