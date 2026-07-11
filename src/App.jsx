@@ -42,6 +42,7 @@ function App() {
       <Routes>
 
         <Route path="/" element={<LoginScreen />} />
+        <Route path="/login" element={<LoginScreen />} />
         <Route path="/Home" element={<HomePage />} />
         <Route path="/rooms" element={<RoomListPage />} />
         <Route path="/details/:roomId" element={<DogStayDetailsPage />} />
