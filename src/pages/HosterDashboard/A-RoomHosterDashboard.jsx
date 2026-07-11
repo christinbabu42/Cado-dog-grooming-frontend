@@ -69,10 +69,12 @@ const RoomHosterDashboard = () => {
       try {
         const userId = localStorage.getItem("userId");
 
-        if (!userId) {
-          navigate("/host-login");
-          return;
-        }
+        
+if (!userId) {
+  console.error("Host userId not found in localStorage");
+  setLoading(false);
+  return;
+}
 
         const bookingRes = await axiosInstance.get(`/api/hostBookings/host/${userId}`);
         const bookings = bookingRes.data.success ? bookingRes.data.bookings : [];
