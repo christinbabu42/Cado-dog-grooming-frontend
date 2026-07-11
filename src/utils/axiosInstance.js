@@ -8,9 +8,13 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
-      window.location.href = "/login";
-    }
+    console.error("API Error:", {
+      status: err.response?.status,
+      url: err.config?.url,
+      data: err.response?.data,
+    });
+
+    // Don't redirect for now
     return Promise.reject(err);
   }
 );
