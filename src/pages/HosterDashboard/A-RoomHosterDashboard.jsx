@@ -121,12 +121,12 @@ if (!userId) {
         const wallet = walletRes.data.wallet || {};
 
         setData({ host: hostProfile, rooms, bookings, reviews, wallet, summary });
-      } catch (err) {
-        console.error("Dashboard Load Error:", err.response?.data || err.message);
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          navigate("/host-login");
-        }
-      } finally {
+} catch (err) {
+  console.error("Dashboard Load Error");
+  console.error("Status:", err.response?.status);
+  console.error("URL:", err.config?.url);
+  console.error("Response:", err.response?.data);
+} finally {
         setLoading(false);
       }
     };
