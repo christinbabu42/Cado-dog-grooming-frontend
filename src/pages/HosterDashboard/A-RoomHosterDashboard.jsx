@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import {
   FaDog, FaTachometerAlt, FaHome, FaBook, FaMoneyCheckAlt, FaWallet,
-  FaStar, FaBell, FaUserCog, FaBars, FaTimes, FaPlusCircle
+  FaStar, FaBell, FaUserCog, FaBars, FaTimes, FaPlusCircle, FaSignOutAlt
 } from "react-icons/fa";
 
 import StatCard from "./StatCard";
@@ -46,6 +46,19 @@ const RoomHosterDashboard = () => {
   if (localStorage.getItem("token") && !localStorage.getItem("userId")) {
     localStorage.clear();
   }
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/auth/logout", {}, {
+        withCredentials: true,
+      });
+    } catch (err) {
+      console.log("Logout API failed:", err);
+    }
+
+    localStorage.clear();
+    navigate("/login");
+  };
 
   useEffect(() => {
     const storeGoogleTokenIfExists = () => {
@@ -244,6 +257,16 @@ const RoomHosterDashboard = () => {
               </div>
             </button>
           ))}
+          
+          <div style={{ marginTop: "auto", padding: "20px" }}>
+            <button
+              onClick={handleLogout}
+              className="sidebar-btn logout-btn"
+            >
+              <FaSignOutAlt className="nav-icon" />
+              <span>Logout</span>
+            </button>
+          </div>
         </nav>
       </aside>
 
