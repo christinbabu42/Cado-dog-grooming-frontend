@@ -53,8 +53,6 @@ const RoomHosterDashboard = () => {
       const hostToken = params.get("token");
       if (hostToken) {
         const decoded = JSON.parse(atob(hostToken.split(".")[1]));
-        localStorage.setItem("token", hostToken);
-        localStorage.setItem("authToken", hostToken);
         localStorage.setItem("userId", decoded.mongoId);
         localStorage.setItem("hostId", decoded.mongoId);
         if (decoded.googleId) localStorage.setItem("googleId", decoded.googleId);
@@ -67,14 +65,16 @@ const RoomHosterDashboard = () => {
 
     const loadHostData = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+        const hostRes = await axiosInstance.get("/api/hosts/profile", {
+          withCredentials: true
+        });
+        const hostProfile = hostRes.data.success ? hostRes.data.host : {};
+        const userId = hostProfile._id;
 
-        
-if (!userId) {
-  console.error("Host userId not found in localStorage");
-  setLoading(false);
-  return;
-}
+        if (!userId) {
+          navigate("/host-login");
+          return;
+        }
 
         const bookingRes = await axiosInstance.get(`/api/hostBookings/host/${userId}`);
         const bookings = bookingRes.data.success ? bookingRes.data.bookings : [];
@@ -107,9 +107,6 @@ if (!userId) {
         const reviewRes = await axiosInstance.get(`/api/host-reviews/host/${userId}`);
         const reviews = reviewRes.data.reviews || [];
 
-        const hostRes = await axiosInstance.get("/api/hosts/profile");
-        const hostProfile = hostRes.data.success ? hostRes.data.host : {};
-
         const roomRes = await axiosInstance.get(`/api/rooms/user/${userId}`);
         const rooms = roomRes.data.rooms || [];
 
@@ -121,12 +118,12 @@ if (!userId) {
         const wallet = walletRes.data.wallet || {};
 
         setData({ host: hostProfile, rooms, bookings, reviews, wallet, summary });
-} catch (err) {
-  console.error("Dashboard Load Error");
-  console.error("Status:", err.response?.status);
-  console.error("URL:", err.config?.url);
-  console.error("Response:", err.response?.data);
-} finally {
+      } catch (err) {
+        console.error("Dashboard Load Error:", err.response?.data || err.message);
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          navigate("/host-login");
+        }
+      } finally {
         setLoading(false);
       }
     };
