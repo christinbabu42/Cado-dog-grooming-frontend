@@ -22,13 +22,27 @@ const HostRoomsManagement = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const hostId = localStorage.getItem("hostId");
+const fetchRooms = async () => {
+  try {
+    const res = await axios.get(
+      "https://cado-dog-grooming-backend.onrender.com/api/rooms/my-rooms",
+      {
+        withCredentials: true,
+      }
+    );
 
-        if (!hostId) {
-          setError("Please log in as a host to view your rooms.");
-          setLoading(false);
-          return;
-        }
+    if (res.data.success) {
+      setRooms(res.data.rooms);
+    } else {
+      setError(res.data.message);
+    }
+  } catch (err) {
+    console.log(err.response?.data);
+    setError(err.response?.data?.message || "Server Error");
+  } finally {
+    setLoading(false);
+  }
+};
 
 const res = await axios.get(
     "https://cado-dog-grooming-backend.onrender.com/api/rooms/my-rooms",
