@@ -30,9 +30,14 @@ const HostRoomsManagement = () => {
           return;
         }
 
-        const res = await axios.get(
-          `https://cado-dog-grooming-backend.onrender.com/api/rooms/host/${hostId}`
-        );
+const res = await axios.get(
+    "https://cado-dog-grooming-backend.onrender.com/api/rooms/my-rooms",
+    {
+        withCredentials: true
+    }
+);
+
+setRooms(res.data.rooms);
 
         if (res.data.success) {
           setRooms(res.data.rooms);
