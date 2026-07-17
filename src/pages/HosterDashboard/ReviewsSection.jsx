@@ -10,26 +10,16 @@ const ReviewsSection = () => {
   const [activeReviewId, setActiveReviewId] = useState(null);
   const [responseText, setResponseText] = useState("");
 
-  const hostId = localStorage.getItem("hostId");
   const BACKEND_BASE_URL = "https://cado-dog-grooming-backend.onrender.com/";
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        if (!hostId || hostId === "undefined") {
-          console.error("❌ Host ID missing");
-          setLoading(false);
-          return;
-        }
-
-        const token = localStorage.getItem('token') || localStorage.getItem('authToken');
-        const config = {
-          headers: { Authorization: `Bearer ${token}` }
-        };
-
         const res = await axios.get(
-          `${BACKEND_BASE_URL}api/host-reviews/host/${hostId}`,
-          config
+          `${BACKEND_BASE_URL}api/reviews/my-reviews`,
+          {
+            withCredentials: true
+          }
         );
 
         if (res.data.success) {
@@ -44,7 +34,7 @@ const ReviewsSection = () => {
     };
 
     fetchReviews();
-  }, [hostId]);
+  }, []);
 
   const submitResponse = async (reviewId) => {
     try {
@@ -53,7 +43,7 @@ const ReviewsSection = () => {
       await axios.post(
         `${BACKEND_BASE_URL}api/reviews/respond/${reviewId}`,
         { text: responseText },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
 
       setReviews(prev =>
@@ -169,17 +159,17 @@ const ReviewsSection = () => {
                   {new Date(review.createdAt).toLocaleDateString()}
                 </span>
 
-<button
-  className="respond-btn-gold"
-  disabled={activeReviewId === review._id}
-  onClick={() => {
-    setActiveReviewId(review._id);
-    setResponseText(review.hostResponse?.text || "");
-  }}
->
-  <FaEdit />
-  <span>{review.hostResponse ? "Edit Response" : "Respond"}</span>
-</button>
+                <button
+                  className="respond-btn-gold"
+                  disabled={activeReviewId === review._id}
+                  onClick={() => {
+                    setActiveReviewId(review._id);
+                    setResponseText(review.hostResponse?.text || "");
+                  }}
+                >
+                  <FaEdit />
+                  <span>{review.hostResponse ? "Edit Response" : "Respond"}</span>
+                </button>
 
               </div>
             </div>
