@@ -126,7 +126,18 @@ const ApprovedGroomersPage = () => {
   const [experience, setExperience] = useState("all");
   const [radius, setRadius] = useState(50); 
 
+  // --- Route Guard / Authentication Check ---
+  useEffect(() => {
+    const tokenUser = localStorage.getItem("userId");
+    if (!tokenUser) {
+      navigate("/login", { replace: true });
+    }
+  }, [navigate]);
+
   const fetchApprovedGroomers = async () => {
+    // Stop API call if user is not authenticated
+    if (!localStorage.getItem("userId")) return;
+    
     try {
       const res = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/grooming-staff");
       if (res.data.success) {
@@ -255,6 +266,11 @@ const ApprovedGroomersPage = () => {
       )}
     </aside>
   );
+
+  // If there is no authenticated session, prevent flash rendering contents
+  if (!localStorage.getItem("userId")) {
+    return null;
+  }
 
   return (
     <div className="page-wrapper">
