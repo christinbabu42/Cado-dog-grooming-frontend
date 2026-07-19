@@ -60,28 +60,27 @@
 .nearBtn {
   margin-top: 20px;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
-  border: 1px solid #AA771C;
-  color: #342301;
+  background: linear-gradient(135deg, #D4AF37 0%, #AA771C 100%);
+  border: 1px solid #8B6508;
+  color: #FFFFFF;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 20px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 25px; /* Optional: gives it sleek premium rounded corners matching the inline style */
-  box-shadow: 0 4px 15px rgba(187, 143, 44, 0.3);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 4px; /* Crisp, formal geometry instead of round bubbles */
+  box-shadow: 0 2px 8px rgba(139, 101, 8, 0.2);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nearBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(187, 143, 44, 0.5);
+  background: linear-gradient(135deg, #E5C158 0%, #B8860B 100%);
+  box-shadow: 0 4px 12px rgba(139, 101, 8, 0.35);
 }
 
 .nearBtn:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 10px rgba(187, 143, 44, 0.3);
+  background: #A67A1E;
+  box-shadow: 0 1px 4px rgba(139, 101, 8, 0.2);
 }
 
 .groomerBtn {
