@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   FaPaw, FaStar, FaUser, FaEnvelope, FaMobileAlt, FaCalendarAlt,
@@ -265,7 +265,7 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
         Premium Price Breakdown
       </h3>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
+      <div style={{ display: 'flex', justifycontent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
         <span>Original Price</span>
         <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>
           ₹{costDetails.fakeAmt}
@@ -298,24 +298,33 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
 // --- MAIN COMPONENT ---
 const DogStayBookingPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [stayData, setStayData] = useState(null);
   const [reviews, setReviews] = useState([]);
 
+  // --- Token Auth Safeguard Flow ---
+  const token = localStorage.getItem("user");
+  useEffect(() => {
+    if (!token) {
+      navigate('/login', { replace: true });
+    }
+  }, [token, navigate]);
+
   // Fetch Stay Data
   useEffect(() => {
-    if (!id) return;
+    if (!id || !token) return;
     axios.get(`${BACKEND_BASE_URL}/api/admin/dogstay/${id}`)
       .then(res => setStayData(res.data))
       .catch(err => console.error("Error loading room", err));
-  }, [id]);
+  }, [id, token]);
 
   // Fetch Reviews Data
   useEffect(() => {
-    if (!id) return;
+    if (!id || !token) return;
     axios.get(`${BACKEND_BASE_URL}/api/reviews/${id}`)
       .then(res => setReviews(res.data))
       .catch(err => console.error("Error loading reviews", err));
-  }, [id]);
+  }, [id, token]);
 
   const averageRating = reviews.length
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
@@ -375,8 +384,6 @@ const DogStayBookingPage = () => {
       const { checkInDate, checkOutDate, numDogs, fullName, email, mobile } = bookingDetails;
       const listingId = stayData?._id;
 
-      // Note: If create-order endpoint also checks authentication context, 
-      // pass { withCredentials: true } here as a third parameter if needed.
       const orderRes = await axios.post(`${BACKEND_BASE_URL}/api/payment/create-order`, {
         listingId,
         checkInDate,
@@ -473,6 +480,11 @@ const DogStayBookingPage = () => {
       alert("Cash booking failed. Please try again.");
     }
   };
+
+  // Immediate layout prevention if token authentication is absent
+  if (!token) {
+    return null;
+  }
 
   if (isConfirmed) {
     return (
