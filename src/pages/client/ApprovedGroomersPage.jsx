@@ -204,7 +204,7 @@ const ApprovedGroomersPage = () => {
     <aside className={`sidebar ${isMobileFilterOpen ? "active" : ""}`}>
       <div className="sidebar-header">
         <span className="sidebar-title" style={{ color: COLORS.textMain, fontWeight: '800', letterSpacing: '1px' }}>REFINE SEARCH</span>
-        {isMobileFilterOpen && <FaTimes onClick={() => setIsMobileFilterOpen(false)} />}
+        {isMobileFilterOpen && <FaTimes onClick={() => setIsMobileFilterOpen(false)} style={{ cursor: 'pointer', fontSize: '20px' }} />}
       </div>
 
       <style>{`
@@ -261,10 +261,12 @@ const ApprovedGroomersPage = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap');
         
+        * { box-sizing: border-box; }
+
         .page-wrapper { font-family: 'Inter', sans-serif; background-color: ${COLORS.bgLight}; min-height: 100vh; color: ${COLORS.textMain}; }
         
         .top-nav { background: #1A1A1A; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .nav-content { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 20px; }
+        .nav-content { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 20px; width: 100%; }
         
         .search-bar { flex: 1; display: flex; align-items: center; background: #2A2A2A; border: 1px solid #444; border-radius: 8px; padding: 10px 16px; transition: 0.3s; }
         .search-bar input { background: transparent; border: none; outline: none; padding-left: 10px; width: 100%; font-size: 14px; color: white; }
@@ -272,103 +274,162 @@ const ApprovedGroomersPage = () => {
         .main-container { max-width: 1280px; margin: 0 auto; padding: 30px 24px; display: grid; grid-template-columns: 320px 1fr; gap: 40px; }
         
         .sidebar { background: white; border: 1px solid ${COLORS.border}; border-radius: 16px; padding: 24px; height: fit-content; position: sticky; top: 100px; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.05); }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .filter-group { margin-bottom: 20px; }
         .filter-group label { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-        
+        .filter-group select { width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; background: white; outline: none; }
+        .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: ${COLORS.textLight}; margin-top: 6px; }
+
+        .input-with-icon { position: relative; }
         .input-with-icon input { width: 100%; padding: 12px 12px 12px 40px; border: 1px solid ${COLORS.border}; border-radius: 8px; font-size: 14px; }
         .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); }
         
         .slider { width: 100%; accent-color: ${COLORS.primary}; height: 4px; border-radius: 2px; }
-.clear-btn {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(
-    135deg,
-    #F5E7A1 0%,
-    #D4AF37 40%,
-    #B8962E 60%,
-    #8C6B1F 100%
-  );
-  border: 1.5px solid #8C6B1F;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 15px;
-  color: #1a1a1a;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-  box-shadow:
-    0 4px 12px rgba(212, 175, 55, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
+        
+        .clear-btn {
+          width: 100%;
+          padding: 12px;
+          background: linear-gradient(
+            135deg,
+            #F5E7A1 0%,
+            #D4AF37 40%,
+            #B8962E 60%,
+            #8C6B1F 100%
+          );
+          border: 1.5px solid #8C6B1F;
+          border-radius: 10px;
+          font-weight: 700;
+          font-size: 15px;
+          color: #1a1a1a;
+          cursor: pointer;
+          margin-top: 10px;
+          transition: all 0.3s ease;
+          box-shadow:
+            0 4px 12px rgba(212, 175, 55, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
 
-/* Hover – luxury glow */
-.clear-btn:hover {
-  background: linear-gradient(
-    135deg,
-    #FFF2B2 0%,
-    #E6C75E 45%,
-    #c9a33a9a 100%
-  );
-  color: #000;
-  box-shadow:
-    0 6px 18px rgba(187, 156, 55, 0.49),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  transform: translateY(-1px);
-}
+        /* Hover – luxury glow */
+        .clear-btn:hover {
+          background: linear-gradient(
+            135deg,
+            #FFF2B2 0%,
+            #E6C75E 45%,
+            #c9a33a9a 100%
+          );
+          color: #000;
+          box-shadow:
+            0 6px 18px rgba(187, 156, 55, 0.49),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+          transform: translateY(-1px);
+        }
 
-/* Active (pressed) */
-.clear-btn:active {
-  transform: translateY(0);
-  box-shadow:
-    0 3px 8px rgba(212, 175, 55, 0.4),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+        /* Active (pressed) */
+        .clear-btn:active {
+          transform: translateY(0);
+          box-shadow:
+            0 3px 8px rgba(212, 175, 55, 0.4),
+            inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
 
+        .apply-btn-mobile {
+          width: 100%;
+          padding: 14px;
+          background: ${COLORS.textMain};
+          color: ${COLORS.primary};
+          border: 1px solid ${COLORS.primary};
+          border-radius: 10px;
+          font-weight: 700;
+          font-size: 15px;
+          cursor: pointer;
+          margin-top: 15px;
+          text-transform: uppercase;
+        }
 
-        .groomer-card { background: white; border-radius: 20px; display: flex; margin-bottom: 28px; overflow: hidden; border: 1px solid ${COLORS.border}; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .groomer-card { background: white; border-radius: 20px; display: flex; margin-bottom: 28px; overflow: hidden; border: 1px solid ${COLORS.border}; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; }
         .groomer-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15); border-color: ${COLORS.primary}; }
         
-        .card-image-wrapper { width: 260px; position: relative; overflow: hidden; }
+        .card-image-wrapper { width: 260px; min-width: 260px; position: relative; overflow: hidden; }
         .card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .groomer-card:hover .card-image-wrapper img { transform: scale(1.1); }
         .card-badge { position: absolute; top: 15px; left: 15px; background: ${COLORS.textMain}; color: ${COLORS.primary}; padding: 6px 12px; border-radius: 30px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border: 1px solid ${COLORS.primary}; }
         
-        .card-content { flex: 1; padding: 25px; display: flex; justify-content: space-between; }
-        .groomer-name { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 5px; color: ${COLORS.textMain}; }
-        .rating-pill { background: ${COLORS.accent}; padding: 4px 12px; border-radius: 20px; border: 1px solid ${COLORS.primary}; display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; }
+        .card-content { flex: 1; padding: 25px; display: flex; justify-content: space-between; gap: 20px; }
+        .card-info-main { flex: 1; }
+        .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; width: 100%; }
+        .groomer-name { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin: 0 0 5px 0; color: ${COLORS.textMain}; word-break: break-word; }
+        .rating-pill { background: ${COLORS.accent}; padding: 4px 12px; border-radius: 20px; border: 1px solid ${COLORS.primary}; display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; flex-shrink: 0; }
         
-        .location-text { display: flex; align-items: center; gap: 5px; color: ${COLORS.textLight}; font-size: 13px; margin: 10px 0; }
-        .skill-tag { display: inline-block; background: ${COLORS.bgLight}; border: 1px solid #eee; padding: 5px 15px; border-radius: 30px; font-size: 11px; font-weight: 600; margin: 0 6px 8px 0; color: ${COLORS.textMain}; transition: 0.3s; }
+        .location-text { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; color: ${COLORS.textLight}; font-size: 13px; margin: 10px 0; line-height: 1.4; }
+        .skills-row { margin: 12px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+        .skill-tag { display: inline-block; background: ${COLORS.bgLight}; border: 1px solid #eee; padding: 5px 15px; border-radius: 30px; font-size: 11px; font-weight: 600; color: ${COLORS.textMain}; transition: 0.3s; }
         .groomer-card:hover .skill-tag { border-color: ${COLORS.primary}; background: ${COLORS.accent}; }
         
-        .perks-row { margin-top: 15px; display: flex; gap: 20px; font-size: 11px; color: ${COLORS.primaryDark}; font-weight: 700; text-transform: uppercase; }
+        .perks-row { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 15px; font-size: 11px; color: ${COLORS.primaryDark}; font-weight: 700; text-transform: uppercase; }
         
-        .card-pricing { border-left: 1px solid ${COLORS.accent}; padding-left: 30px; display: flex; flex-direction: column; justify-content: center; min-width: 180px; text-align: right; background: linear-gradient(to right, #ffffff, ${COLORS.accent}); }
-        .price-amount { font-size: 32px; font-weight: 800; color: ${COLORS.textMain}; margin: 5px 0; }
+        .card-pricing { border-left: 1px solid ${COLORS.accent}; padding-left: 30px; display: flex; flex-direction: column; justify-content: center; min-width: 180px; text-align: right; background: linear-gradient(to right, #ffffff, ${COLORS.accent}); flex-shrink: 0; }
+        .price-amount { font-size: 32px; font-weight: 800; color: ${COLORS.textMain}; margin: 5px 0; display: block; }
         .price-sub { font-size: 10px; color: ${COLORS.textLight}; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .book-btn { margin-top: 15px; background: ${COLORS.textMain}; color: ${COLORS.primary}; border: 1px solid ${COLORS.primary}; padding: 12px; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .book-btn { margin-top: 15px; background: ${COLORS.textMain}; color: ${COLORS.primary}; border: 1px solid ${COLORS.primary}; padding: 12px; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-size: 12px; transition: 0.3s; width: 100%; }
         .book-btn:hover { background: ${COLORS.primary}; color: white; border-color: white; }
 
-        .mobile-filter-bar { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: ${COLORS.textMain}; color: ${COLORS.primary}; padding: 15px 35px; border-radius: 40px; z-index: 1001; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); font-weight: 800; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; border: 1px solid ${COLORS.primary}; }
+        .mobile-filter-bar { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: ${COLORS.textMain}; color: ${COLORS.primary}; padding: 15px 35px; border-radius: 40px; z-index: 1001; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); font-weight: 800; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; border: 1px solid ${COLORS.primary}; cursor: pointer; }
         
         .spinner { width: 40px; height: 40px; border: 4px solid ${COLORS.accent}; border-top: 4px solid ${COLORS.primary}; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        @media (max-width: 768px) {
-          .main-container { grid-template-columns: 1fr; padding: 20px; }
+        @media (max-width: 992px) {
+          .main-container { grid-template-columns: 1fr; padding: 20px 15px; gap: 20px; }
           .sidebar { display: none; }
-          .sidebar.active { display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 2000; border-radius: 0; padding-top: 80px; }
+          .sidebar.active { 
+            display: block; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            z-index: 2000; 
+            border-radius: 0; 
+            padding: 24px; 
+            overflow-y: auto;
+          }
           .groomer-card { flex-direction: column; }
-          .card-image-wrapper { width: 100%; height: 240px; }
-          .card-pricing { border-left: none; padding: 20px; text-align: left; border-top: 1px solid ${COLORS.accent}; flex-direction: row; justify-content: space-between; align-items: center; }
+          .card-image-wrapper { width: 100%; height: 240px; min-width: 100%; }
+          .card-content { flex-direction: column; padding: 20px; gap: 15px; }
+          .card-header-row { align-items: center; }
+          .groomer-name { font-size: 22px; }
+          .card-pricing { 
+            border-left: none; 
+            padding: 15px 0 0 0; 
+            text-align: left; 
+            border-top: 1px solid ${COLORS.accent}; 
+            flex-direction: row; 
+            justify-content: space-between; 
+            align-items: center; 
+            min-width: 100%;
+            background: none;
+          }
+          .price-wrapper { display: flex; flex-direction: column; }
+          .book-btn { margin-top: 0; width: auto; padding: 10px 20px; }
           .mobile-filter-bar { display: flex; }
+          .results-header { flex-direction: column; align-items: flex-start !map; gap: 10px; margin-bottom: 20px; }
+        }
+
+        @media (max-width: 480px) {
+          .nav-content { gap: 10px; }
+          .search-bar { padding: 8px 12px; }
+          .search-bar input { font-size: 13px; }
+          .groomer-name { font-size: 20px; }
+          .card-pricing { flex-direction: column; align-items: flex-start; gap: 12px; }
+          .book-btn { width: 100%; text-align: center; }
+          .perks-row { gap: 10px; }
         }
       `}</style>
 
       {/* Top Navigation */}
       <nav className="top-nav">
         <div className="nav-content">
-          <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: COLORS.primary }}><FaAngleLeft size={24} /></button>
+          <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: COLORS.primary, display: 'flex', alignItems: 'center', padding: 0 }}><FaAngleLeft size={24} /></button>
           <div className="search-bar">
             <FaSearch color={COLORS.primary} size={16} />
             <input type="text" placeholder="Search elite groomers, skills, or services..." value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -380,7 +441,7 @@ const ApprovedGroomersPage = () => {
         <FilterSidebar />
 
         <main className="results-list">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+          <div className="results-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' }}>
             <h2 style={{ fontSize: '22px', fontWeight: '800', margin: 0, fontFamily: 'Playfair Display, serif' }}>
               {filteredGroomers.length} {userCoords ? 'Available Nearby' : 'Exclusive Experts'}
             </h2>
@@ -390,16 +451,16 @@ const ApprovedGroomersPage = () => {
           </div>
 
           {loading ? (
-            <div style={{ textAlign: "center", padding: "100px" }}>
+            <div style={{ textAlign: "center", padding: "100px 20px" }}>
                 <div className="spinner"></div>
-                <p style={{ fontWeight: '600', letterSpacing: '1px' }}>CURATING TOP PROFESSIONALS...</p>
+                <p style={{ fontWeight: '600', letterSpacing: '1px', fontSize: '14px' }}>CURATING TOP PROFESSIONALS...</p>
             </div>
           ) : filteredGroomers.length === 0 ? (
             <div style={{ background: "white", padding: "80px 20px", borderRadius: "20px", textAlign: "center", border: `1px solid ${COLORS.border}` }}>
               <FaSearch size={40} color={COLORS.primary} style={{ marginBottom: '20px', opacity: 0.5 }} />
-              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px' }}>No matching experts found</h3>
-              <p style={{ color: COLORS.textLight, marginTop: '10px' }}>Consider expanding your search radius or adjusting price filters.</p>
-              <button onClick={clearFilters} style={{ color: COLORS.primaryDark, background: 'none', border: 'none', fontWeight: 800, textTransform: 'uppercase', marginTop: '20px', cursor: 'pointer', borderBottom: `2px solid ${COLORS.primary}` }}>Reset All Preferences</button>
+              <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', margin: '0 0 10px 0' }}>No matching experts found</h3>
+              <p style={{ color: COLORS.textLight, marginTop: '10px', fontSize: '14px' }}>Consider expanding your search radius or adjusting price filters.</p>
+              <button onClick={clearFilters} style={{ color: COLORS.primaryDark, background: 'none', border: 'none', fontWeight: 800, textTransform: 'uppercase', marginTop: '20px', cursor: 'pointer', borderBottom: `2px solid ${COLORS.primary}`, paddingBottom: '2px' }}>Reset All Preferences</button>
             </div>
           ) : (
             filteredGroomers.map((g) => <GroomerCard key={g._id} g={g} navigate={navigate} distance={g.distance} />)
