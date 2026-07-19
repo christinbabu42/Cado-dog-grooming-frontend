@@ -32,28 +32,14 @@ const LoginScreen = () => {
         console.log("📌 Current URL:", window.location.href);
         console.log("📌 URL Query:", location.search);
 
-        // Check if user just manually logged out
+        // Remove token from URL if present to clean up the browser bar
+        window.history.replaceState({}, document.title, "/login");
+
         const justLoggedOut = localStorage.getItem("justLoggedOut");
         if (justLoggedOut) {
             localStorage.removeItem("justLoggedOut");
-            window.history.replaceState({}, document.title, "/login");
             return;
         }
-
-        // 🛡️ PREVENT PREMATURE ALERTS: 
-        // Only verify credentials if there's a reason to believe the user just authenticated
-        // (e.g., redirect query parameters present) or if a session already exists.
-        const hasAuthParams = location.search.includes("code") || location.search.includes("token") || location.search.includes("success");
-        const hasExistingSession = localStorage.getItem("userId");
-
-        if (!hasAuthParams && !hasExistingSession) {
-            // Clean browser bar silently and exit without making an API call
-            window.history.replaceState({}, document.title, "/login");
-            return;
-        }
-
-        // Clean browser bar
-        window.history.replaceState({}, document.title, "/login");
 
         // ⭐ Fetch logged-in user's details using axios via HttpOnly Cookies
         axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
@@ -61,6 +47,7 @@ const LoginScreen = () => {
         })
         .then(res => {
             console.log("📌 API Response:", res.data);
+
             const data = res.data;
 
             // Save to localStorage
@@ -77,17 +64,22 @@ const LoginScreen = () => {
             // ✅ SAVE STAFF PROFILE IF ROLE = GRSTAFF
             if (data.role === "grstaff" && data.staffProfile) {
                 const staffProfile = data.staffProfile;
+
+                // Save the full profile
                 localStorage.setItem("staffProfile", JSON.stringify(staffProfile));
 
+                // _id = grooming staff MongoDB ID
                 if (staffProfile._id) {
                     localStorage.setItem("staffId", staffProfile._id.toString());
                     console.log("🔥 staffId saved:", staffProfile._id.toString());
                 }
 
+                // staffID = linked user._id
                 if (staffProfile.staffID) {
                     localStorage.setItem("staffUserId", staffProfile.staffID.toString());
                     console.log("🔥 staffUserId saved:", staffProfile.staffID.toString());
                 }
+
                 console.log("Staff profile:", staffProfile);
             }
 
@@ -103,8 +95,7 @@ const LoginScreen = () => {
 
     // ⭐ GOOGLE SIGN-IN
     const signInWithGoogle = () => {
-        // Optional: you can comment out or remove this line if you don't want the "Redirecting..." alert at all
-        showAlert("Redirecting to Google login...", "success", false); 
+        showAlert("Redirecting to Google login...", "success", false);
         console.log("➡ Redirecting to backend /auth/google");
 
         setTimeout(() => {
@@ -124,7 +115,13 @@ const LoginScreen = () => {
 
     return (
         <div className="react-login-body">
+            
+
+
             <div className="login-container">
+               
+               
+                
                 <h2 className="signup-title">Login</h2>
 
                 <button className="login-button google" onClick={signInWithGoogle}>
