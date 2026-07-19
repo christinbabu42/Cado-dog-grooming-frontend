@@ -2,12 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 // 🔑 CHANGED: Switched vanilla axios to your custom instance
 import axios from "../../utils/axiosInstance"; 
 import { FaMapMarkerAlt, FaEdit, FaCheckCircle, FaSatellite, FaPaw, FaUser, FaCat, FaDog } from 'react-icons/fa';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'; // Beautiful Alert Library
 import "./GroomerBookingPage.css";
 
 const GroomerBookingPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     // STATE MANAGEMENT
     const [selectedStaffID, setSelectedStaffID] = useState(null);
@@ -139,19 +140,33 @@ const GroomerBookingPage = () => {
     }, [form.service, form.dogSize, form.lat, form.lng, selectedStaffID, petCount]);
 
     useEffect(() => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.async = true;
-      document.body.appendChild(script);
-      fetchUserProfile();
+      // 🔒 ROUTE GUARD: Token / Auth Check verification logic
+      const verifyTokenAndAccess = async () => {
+        try {
+          await axios.get("/api/user/me");
+          
+          // Script registration and setup if token verification succeeds
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          script.async = true;
+          document.body.appendChild(script);
+          
+          fetchUserProfile();
 
-      const groomer = JSON.parse(localStorage.getItem("selectedGroomer"));
-      if (groomer) {
-        setLocalGroomer(groomer);
-        const idToSet = groomer.staffID || groomer._id;
-        if (idToSet) setSelectedStaffID(idToSet);
-      }
-    }, []);
+          const groomer = JSON.parse(localStorage.getItem("selectedGroomer"));
+          if (groomer) {
+            setLocalGroomer(groomer);
+            const idToSet = groomer.staffID || groomer._id;
+            if (idToSet) setSelectedStaffID(idToSet);
+          }
+        } catch (authError) {
+          console.error("Authentication check failed. Redirecting...", authError);
+          navigate("/login", { replace: true });
+        }
+      };
+
+      verifyTokenAndAccess();
+    }, [navigate]);
 
     useEffect(() => { if (selectedStaffID) fetchStaff(selectedStaffID); }, [selectedStaffID]);
     

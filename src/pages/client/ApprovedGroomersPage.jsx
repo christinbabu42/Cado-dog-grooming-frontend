@@ -126,54 +126,18 @@ const ApprovedGroomersPage = () => {
   const [experience, setExperience] = useState("all");
   const [radius, setRadius] = useState(50); 
 
-  // --- Route Guard / Authentication Check (Fix 1) ---
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await axios.get(
-          "https://cado-dog-grooming-backend.onrender.com/api/user/me",
-          {
-            withCredentials: true
-          }
-        );
-
-        console.log("Authenticated user:", res.data);
-
-        // keep localStorage synced
-        localStorage.setItem("userId", res.data._id);
-        localStorage.setItem("user", JSON.stringify(res.data));
-
-        // Fetch groomers once authenticated
-        fetchApprovedGroomers();
-      } catch (err) {
-        console.log("Not authenticated");
-        navigate("/login", { replace: true });
-      }
-    };
-
-    checkAuth();
-  }, [navigate]);
-
-  // --- Fetch Approved Groomers (Fix 2) ---
   const fetchApprovedGroomers = async () => {
     try {
-      const res = await axios.get(
-        "https://cado-dog-grooming-backend.onrender.com/api/grooming-staff",
-        {
-          withCredentials: true
-        }
-      );
+      const res = await axios.get("https://cado-dog-grooming-backend.onrender.com/api/grooming-staff");
       if (res.data.success) {
         const approved = res.data.data.filter((g) => g.isApproved);
         setApprovedGroomers(approved);
         setFilteredGroomers(approved);
       }
-    } catch (error) { 
-      console.error(error); 
-    } finally { 
-      setLoading(false); 
-    }
+    } catch (error) { console.error(error); } finally { setLoading(false); }
   };
+
+  useEffect(() => { fetchApprovedGroomers(); }, []);
 
   const handleLocationSearch = async (val) => {
     setLocation(val);
@@ -253,6 +217,10 @@ const ApprovedGroomersPage = () => {
 
       <div className="filter-group">
         <label>Service Location</label>
+        {/* <div className="input-with-icon">
+            <FaMapMarkerAlt className="input-icon" color={COLORS.primary} />
+            <input type="text" placeholder="Search city..." value={location} onChange={(e) => handleLocationSearch(e.target.value)} />
+        </div> */}
         <button className="near-me-btn" onClick={detectMyLocation}>
             <FaCrosshairs /> Find Near Me
         </button>
@@ -288,11 +256,6 @@ const ApprovedGroomersPage = () => {
     </aside>
   );
 
-  // --- Loading Guard Block (Fix 3) ---
-  if (loading) {
-    return null;
-  }
-
   return (
     <div className="page-wrapper">
       <style>{`
@@ -315,51 +278,52 @@ const ApprovedGroomersPage = () => {
         .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); }
         
         .slider { width: 100%; accent-color: ${COLORS.primary}; height: 4px; border-radius: 2px; }
-        .clear-btn {
-          width: 100%;
-          padding: 12px;
-          background: linear-gradient(
-            135deg,
-            #F5E7A1 0%,
-            #D4AF37 40%,
-            #B8962E 60%,
-            #8C6B1F 100%
-          );
-          border: 1.5px solid #8C6B1F;
-          border-radius: 10px;
-          font-weight: 700;
-          font-size: 15px;
-          color: #1a1a1a;
-          cursor: pointer;
-          margin-top: 10px;
-          transition: all 0.3s ease;
-          box-shadow:
-            0 4px 12px rgba(212, 175, 55, 0.35),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6);
-        }
+.clear-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(
+    135deg,
+    #F5E7A1 0%,
+    #D4AF37 40%,
+    #B8962E 60%,
+    #8C6B1F 100%
+  );
+  border: 1.5px solid #8C6B1F;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1a1a1a;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 4px 12px rgba(212, 175, 55, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
 
-        /* Hover – luxury glow */
-        .clear-btn:hover {
-          background: linear-gradient(
-            135deg,
-            #FFF2B2 0%,
-            #E6C75E 45%,
-            #c9a33a9a 100%
-          );
-          color: #000;
-          box-shadow:
-            0 6px 18px rgba(187, 156, 55, 0.49),
-            inset 0 1px 0 rgba(255, 255, 255, 0.7);
-          transform: translateY(-1px);
-        }
+/* Hover – luxury glow */
+.clear-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #FFF2B2 0%,
+    #E6C75E 45%,
+    #c9a33a9a 100%
+  );
+  color: #000;
+  box-shadow:
+    0 6px 18px rgba(187, 156, 55, 0.49),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
 
-        /* Active (pressed) */
-        .clear-btn:active {
-          transform: translateY(0);
-          box-shadow:
-            0 3px 8px rgba(212, 175, 55, 0.4),
-            inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+/* Active (pressed) */
+.clear-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 3px 8px rgba(212, 175, 55, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 
         .groomer-card { background: white; border-radius: 20px; display: flex; margin-bottom: 28px; overflow: hidden; border: 1px solid ${COLORS.border}; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .groomer-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15); border-color: ${COLORS.primary}; }
@@ -425,7 +389,12 @@ const ApprovedGroomersPage = () => {
             </div>
           </div>
 
-          {filteredGroomers.length === 0 ? (
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "100px" }}>
+                <div className="spinner"></div>
+                <p style={{ fontWeight: '600', letterSpacing: '1px' }}>CURATING TOP PROFESSIONALS...</p>
+            </div>
+          ) : filteredGroomers.length === 0 ? (
             <div style={{ background: "white", padding: "80px 20px", borderRadius: "20px", textAlign: "center", border: `1px solid ${COLORS.border}` }}>
               <FaSearch size={40} color={COLORS.primary} style={{ marginBottom: '20px', opacity: 0.5 }} />
               <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px' }}>No matching experts found</h3>
