@@ -265,7 +265,7 @@ const PriceDetailsCard = ({ stayData, costDetails }) => {
         Premium Price Breakdown
       </h3>
 
-      <div style={{ display: 'flex', justifycontent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: TEXT_BLACK }}>
         <span>Original Price</span>
         <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>
           ₹{costDetails.fakeAmt}
@@ -301,30 +301,43 @@ const DogStayBookingPage = () => {
   const navigate = useNavigate();
   const [stayData, setStayData] = useState(null);
   const [reviews, setReviews] = useState([]);
+  
+  // --- New Checking Interceptor State ---
+  const [checking, setChecking] = useState(true);
 
-  // --- Token Auth Safeguard Flow ---
-  const token = localStorage.getItem("user");
+  // --- Verified HttpOnly Cookie Auth Guard Flow ---
   useEffect(() => {
-    if (!token) {
-      navigate('/login', { replace: true });
-    }
-  }, [token, navigate]);
+    axios.get(
+      "https://cado-dog-grooming-backend.onrender.com/api/user/me",
+      {
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      localStorage.setItem("userId", res.data._id);
+      setChecking(false);
+    })
+    .catch((err) => {
+      console.error("Auth verification failed:", err);
+      navigate("/login", { replace: true });
+    });
+  }, [navigate]);
 
   // Fetch Stay Data
   useEffect(() => {
-    if (!id || !token) return;
+    if (!id || checking) return;
     axios.get(`${BACKEND_BASE_URL}/api/admin/dogstay/${id}`)
       .then(res => setStayData(res.data))
       .catch(err => console.error("Error loading room", err));
-  }, [id, token]);
+  }, [id, checking]);
 
   // Fetch Reviews Data
   useEffect(() => {
-    if (!id || !token) return;
+    if (!id || checking) return;
     axios.get(`${BACKEND_BASE_URL}/api/reviews/${id}`)
       .then(res => setReviews(res.data))
       .catch(err => console.error("Error loading reviews", err));
-  }, [id, token]);
+  }, [id, checking]);
 
   const averageRating = reviews.length
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
@@ -481,8 +494,8 @@ const DogStayBookingPage = () => {
     }
   };
 
-  // Immediate layout prevention if token authentication is absent
-  if (!token) {
+  // Immediate loading interceptor while verification is in-flight
+  if (checking) {
     return null;
   }
 
