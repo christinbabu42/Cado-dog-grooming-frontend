@@ -227,7 +227,7 @@ const SearchBar = () => {
 
         {/* 🔄 Position Swap: Location detection trigger button now lives in the search layout block */}
         <button
-          className={search.searchBtn}
+          className={search.nearBtn}
           onClick={handleNearMe}
           disabled={isLocating}
         >
@@ -237,8 +237,30 @@ const SearchBar = () => {
 
       {/* 🔄 Position Swap: Main search navigation trigger button now sits here styled as the secondary button */}
       <button
-        className={search.nearBtn}
+        className={search.searchBtn}
         onClick={() => navigate('/rooms')}
+        style={{
+          background: 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%)',
+          color: '#1a1a1a',
+          border: '1px solid #aa771c',
+          padding: '12px 30px',
+          borderRadius: '25px',
+          fontSize: '16px',
+          fontWeight: '700',
+          cursor: 'pointer',
+          boxShadow: '0 4px 15px rgba(187, 147, 60, 0.3)',
+          transition: 'all 0.3s ease',
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = '0 6px 20px rgba(187, 147, 60, 0.45)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0px)';
+          e.currentTarget.style.boxShadow = '0 4px 15px rgba(187, 147, 60, 0.3)';
+        }}
       >
         🔍 search your pet's room
       </button>
