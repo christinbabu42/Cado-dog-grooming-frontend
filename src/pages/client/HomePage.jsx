@@ -227,7 +227,7 @@ const SearchBar = () => {
 
         {/* 🔄 Position Swap: Location detection trigger button now lives in the search layout block */}
         <button
-          className={search.nearBtn}
+          className={search.searchBtn}
           onClick={handleNearMe}
           disabled={isLocating}
         >
@@ -237,29 +237,29 @@ const SearchBar = () => {
 
       {/* 🔄 Position Swap: Main search navigation trigger button now sits here styled as the secondary button */}
       <button
-        className={search.searchBtn}
+        className={search.nearBtn}
         onClick={() => navigate('/rooms')}
         style={{
-          background: 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%)',
-          color: '#1a1a1a',
-          border: '1px solid #aa771c',
-          padding: '12px 30px',
+          background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
+          color: '#342301',
+          border: '1px solid #AA771C',
+          padding: '12px 24px',
           borderRadius: '25px',
-          fontSize: '16px',
-          fontWeight: '700',
           cursor: 'pointer',
-          boxShadow: '0 4px 15px rgba(187, 147, 60, 0.3)',
-          transition: 'all 0.3s ease',
+          fontWeight: 'bold',
           textTransform: 'uppercase',
-          letterSpacing: '0.5px'
+          letterSpacing: '0.5px',
+          boxShadow: '0 4px 15px rgba(187, 143, 44, 0.3)',
+          textShadow: '0 1px 0 rgba(255, 255, 255, 0.4)',
+          transition: 'transform 0.2s, box-shadow 0.2s'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 6px 20px rgba(187, 147, 60, 0.45)';
+          e.currentTarget.style.transform = 'translateY(-1px)';
+          e.currentTarget.style.boxShadow = '0 6px 20px rgba(187, 143, 44, 0.5)';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0px)';
-          e.currentTarget.style.boxShadow = '0 4px 15px rgba(187, 147, 60, 0.3)';
+          e.currentTarget.style.transform = 'none';
+          e.currentTarget.style.boxShadow = '0 4px 15px rgba(187, 143, 44, 0.3)';
         }}
       >
         🔍 search your pet's room
