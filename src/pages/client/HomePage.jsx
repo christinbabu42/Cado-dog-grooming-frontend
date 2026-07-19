@@ -85,6 +85,28 @@ const NavBar = () => {
   const { isMobile } = useWindowWidth();
   const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    try {
+      await fetch(
+        "https://your-backend-domain.com/auth/google/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      localStorage.clear();
+      sessionStorage.clear();
+
+      navigate("/login", { replace: true });
+
+    } catch (error) {
+      console.error("Logout error:", error);
+
+      navigate("/login", { replace: true });
+    }
+  };
+
   return (
     <nav
       className={nav.nav}
@@ -108,6 +130,21 @@ Luvio
         <a href="/profile" className={nav.link}>
           ⚙️ {!isMobile && 'My Account'}
         </a>
+
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "#ff4d4f",
+            color: "white",
+            border: "none",
+            padding: "8px 15px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: "600"
+          }}
+        >
+          🚪 {!isMobile && "Logout"}
+        </button>
 
       </div>
     </nav>
