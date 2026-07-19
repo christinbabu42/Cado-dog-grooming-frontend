@@ -230,33 +230,6 @@ const SearchBar = () => {
           className={search.searchBtn}
           onClick={handleNearMe}
           disabled={isLocating}
-          style={{
-            background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
-            color: '#342301',
-            border: '1px solid #AA771C',
-            padding: '12px 24px',
-            borderRadius: '25px',
-            cursor: isLocating ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            boxShadow: '0 4px 15px rgba(187, 143, 44, 0.3)',
-            textShadow: '0 1px 0 rgba(255, 255, 255, 0.4)',
-            opacity: isLocating ? 0.7 : 1,
-            transition: 'transform 0.2s, box-shadow 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            if (!isLocating) {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(187, 143, 44, 0.5)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isLocating) {
-              e.currentTarget.style.transform = 'none';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(187, 143, 44, 0.3)';
-            }
-          }}
         >
           {isLocating ? '📍 Detecting...' : 'Use My Current Location'}
         </button>
@@ -266,28 +239,6 @@ const SearchBar = () => {
       <button
         className={search.nearBtn}
         onClick={() => navigate('/rooms')}
-        style={{
-          background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
-          color: '#342301',
-          border: '1px solid #AA771C',
-          padding: '12px 24px',
-          borderRadius: '25px',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px',
-          boxShadow: '0 4px 15px rgba(187, 143, 44, 0.3)',
-          textShadow: '0 1px 0 rgba(255, 255, 255, 0.4)',
-          transition: 'transform 0.2s, box-shadow 0.2s'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-1px)';
-          e.currentTarget.style.boxShadow = '0 6px 20px rgba(187, 143, 44, 0.5)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'none';
-          e.currentTarget.style.boxShadow = '0 4px 15px rgba(187, 143, 44, 0.3)';
-        }}
       >
         🔍 search your pet's room
       </button>
