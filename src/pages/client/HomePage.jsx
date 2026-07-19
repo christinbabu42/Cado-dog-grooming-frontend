@@ -84,7 +84,7 @@ const Footer = () => {
 const NavBar = () => {
   const { isMobile } = useWindowWidth();
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -136,20 +136,20 @@ const NavBar = () => {
       className={nav.nav}
       style={{ 
         padding: isMobile ? '15px 20px' : '15px 60px',
-        position: 'relative',
         display: 'flex',
         flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }}
     >
-      <div className={nav.logo} style={{ fontWeight: 'bold', fontSize: '24px' }}>
+      <div className={nav.logo}>
         Luvio
       </div>
 
+      {/* 3-Lines Mobile Toggle Button */}
       {isMobile && (
         <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => setIsOpen(!isOpen)}
           style={{
             background: 'none',
             border: 'none',
@@ -159,13 +159,12 @@ const NavBar = () => {
             justifyContent: 'space-between',
             width: '24px',
             height: '18px',
-            padding: '0',
-            zIndex: '10'
+            padding: 0
           }}
         >
-          <span style={{ width: '100%', height: '2px', backgroundColor: '#484848', transition: '0.3s', transform: isMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none' }}></span>
-          <span style={{ width: '100%', height: '2px', backgroundColor: '#484848', transition: '0.3s', opacity: isMenuOpen ? '0' : '1' }}></span>
-          <span style={{ width: '100%', height: '2px', backgroundColor: '#484848', transition: '0.3s', transform: isMenuOpen ? 'rotate(-45deg) translate(6px, -6px)' : 'none' }}></span>
+          <span style={{ width: '100%', height: '2px', backgroundColor: '#484848' }}></span>
+          <span style={{ width: '100%', height: '2px', backgroundColor: '#484848' }}></span>
+          <span style={{ width: '100%', height: '2px', backgroundColor: '#484848' }}></span>
         </button>
       )}
 
@@ -173,24 +172,21 @@ const NavBar = () => {
         className={nav.links} 
         style={{ 
           gap: isMobile ? '15px' : '18px',
-          display: isMobile ? (isMenuOpen ? 'flex' : 'none') : 'flex',
+          display: isMobile ? (isOpen ? 'flex' : 'none') : 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           width: isMobile ? '100%' : 'auto',
-          marginTop: isMobile ? '15px' : '0',
-          paddingTop: isMobile ? '10px' : '0',
-          borderTop: isMobile ? '1px solid #eee' : 'none',
-          alignItems: isMobile ? 'flex-start' : 'center'
+          marginTop: isMobile ? '15px' : '0'
         }}
       >
-        <a href="/owner/list-stay" className={nav.link} style={{ width: isMobile ? '100%' : 'auto', padding: isMobile ? '5px 0' : '0' }}>
+        <a href="/owner/list-stay" className={nav.link}>
           📋 List your <span className={nav.primary}>Dog-Stay</span>
         </a>
 
-        <a href="/staff" className={nav.link} style={{ width: isMobile ? '100%' : 'auto', padding: isMobile ? '5px 0' : '0' }}>
+        <a href="/staff" className={nav.link}>
           🐕‍🦺 Grooming Career
         </a>
 
-        <a href="/profile" className={nav.link} style={{ width: isMobile ? '100%' : 'auto', padding: isMobile ? '5px 0' : '0' }}>
+        <a href="/profile" className={nav.link}>
           ⚙️ My Account
         </a>
 
@@ -204,12 +200,12 @@ const NavBar = () => {
             borderRadius: "8px",
             cursor: "pointer",
             fontWeight: "600",
-            width: isMobile ? '100%' : 'auto',
-            textAlign: 'center'
+            width: isMobile ? '100%' : 'auto'
           }}
         >
           🚪 Logout
         </button>
+
       </div>
     </nav>
   );
@@ -249,132 +245,45 @@ const SearchBar = () => {
   return (
     <div
       className={search.wrapper}
-      style={{ padding: isMobile ? '40px 20px' : '100px 0 50px' }}
+      style={{ padding: isMobile ? '50px 20px' : '100px 0 50px' }}
     >
-      <h2 className={search.heading} style={{ fontSize: isMobile ? '28px' : '36px', marginBottom: isMobile ? '25px' : '40px' }}>
+      <h2 className={search.heading}>
         Book a cozy room for your best friend!
       </h2>
 
       <div
         className={search.box}
-        style={{ 
-          flexDirection: isMobile ? 'column' : 'row',
-          borderRadius: '8px',
-          boxShadow: '0 12px 25px rgba(139, 101, 8, 0.08)',
-          overflow: 'hidden',
-          border: '1px solid #D4AF37',
-          maxWidth: '900px',
-          width: '100%',
-          margin: '0 auto'
-        }}
+        style={{ flexDirection: isMobile ? 'column' : 'row' }}
       >
         <input
           className={search.input}
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder="📍 Location"
-          style={{ 
-            padding: '15px', 
-            border: 'none', 
-            outline: 'none', 
-            flex: '3', 
-            color: 'black', 
-            fontSize: '16px',
-            width: isMobile ? '100%' : 'auto',
-            boxSizing: 'border-box'
-          }}
         />
 
+        {/* 🔄 Position Swap: Location detection trigger button now lives in the search layout block */}
         <button
           className={search.searchBtn}
           onClick={handleNearMe}
           disabled={isLocating}
-          style={{
-            background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
-            color: '#ffffff',
-            border: 'none',
-            cursor: isLocating ? 'not-allowed' : 'pointer',
-            fontWeight: '600',
-            padding: '14px 26px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            fontSize: '14px',
-            opacity: isLocating ? 0.7 : 1,
-            width: isMobile ? '100%' : 'auto',
-            boxSizing: 'border-box',
-            transition: 'all 0.25s ease'
-          }}
         >
           {isLocating ? '📍 Detecting...' : 'Use My Current Location'}
         </button>
       </div>
 
+      {/* 🔄 Position Swap: Main search navigation trigger button now sits here styled as the secondary button */}
       <button
         className={search.nearBtn}
         onClick={() => navigate('/rooms')}
-        style={{
-          marginTop: '25px',
-          padding: '12px 28px',
-          background: '#ffffff',
-          border: '2px solid #D4AF37',
-          color: '#AA771C',
-          cursor: 'pointer',
-          fontWeight: '700',
-          marginBottom: '25px',
-          letterSpacing: '1px',
-          textTransform: 'uppercase',
-          fontSize: '14px',
-          borderRadius: '6px', 
-          boxShadow: '0 4px 12px rgba(170, 119, 28, 0.1)',
-          width: isMobile ? '100%' : 'auto',
-          maxWidth: isMobile ? '900px' : 'none',
-          boxSizing: 'border-box',
-          transition: 'all 0.25s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'linear-gradient(135deg, #D4AF37 0%, #AA771C 100%)';
-          e.currentTarget.style.color = '#ffffff';
-          e.currentTarget.style.boxShadow = '0 6px 18px rgba(139, 101, 8, 0.25)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = '#ffffff';
-          e.currentTarget.style.color = '#AA771C';
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(170, 119, 28, 0.1)';
-        }}
       >
         🔍 search your pet's room
       </button>
 
-      <div className={search.groomerWrap} style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <div className={search.groomerWrap}>
         <button
           className={search.groomerBtn}
           onClick={() => navigate('/groomers')}
-          style={{
-            background: 'linear-gradient(135deg, #111111 0%, #222222 100%)', 
-            color: '#D4AF37', 
-            border: '2px solid #D4AF37', 
-            borderRadius: '8px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            minHeight: '1.5cm',
-            height: 'auto',
-            padding: isMobile ? '15px 20px' : '0 28px',
-            fontSize: '15px',
-            letterSpacing: '0.5px',
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.15)',
-            width: isMobile ? '100%' : 'auto',
-            maxWidth: '900px',
-            boxSizing: 'border-box',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'linear-gradient(135deg, #D4AF37 0%, #AA771C 100%)';
-            e.currentTarget.style.color = '#111111';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'linear-gradient(135deg, #111111 0%, #222222 100%)';
-            e.currentTarget.style.color = '#D4AF37';
-          }}
         >
           ✂️ Book a groomer now — do grooming in your home
         </button>
@@ -405,7 +314,7 @@ const HomePage = () => {
             flexWrap: 'wrap',
             justifyContent: 'center',
             gap: '20px',
-            padding: '20px',
+            padding: '20px 0',
           }}
         >
           {[
@@ -417,11 +326,11 @@ const HomePage = () => {
             <div
               key={i}
               style={{
-                flex: isMobile ? '1 1 100%' : '1 1 250px',
+                flex: '1 1 250px',
                 maxWidth: '300px',
                 borderRadius: '20px',
                 overflow: 'hidden',
-                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.05)',
+                boxShadow: '0 8px 20px rgba(255, 255, 255, 0.1)',
                 cursor: 'pointer',
                 transition: 'transform 0.3s',
               }}
