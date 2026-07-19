@@ -210,43 +210,97 @@ const SearchBar = () => {
       className={search.wrapper}
       style={{ padding: isMobile ? '50px 20px' : '100px 0 50px' }}
     >
-      <h2 className={search.heading}>
+      <h2 className={search.heading} style={{ marginBottom: '30px', fontWeight: '700' }}>
         Book a cozy room for your best friend!
       </h2>
 
       <div
         className={search.box}
-        style={{ flexDirection: isMobile ? 'column' : 'row' }}
+        style={{ 
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: '12px',
+          alignItems: 'stretch',
+          maxWidth: '650px',
+          margin: '0 auto 20px auto',
+          background: '#ffffff',
+          padding: '8px',
+          borderRadius: '30px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+        }}
       >
         <input
           className={search.input}
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder="📍 Location"
+          style={{
+            border: 'none',
+            padding: '12px 20px',
+            fontSize: '16px',
+            flexGrow: 1,
+            outline: 'none',
+            borderRadius: '25px'
+          }}
         />
 
-        {/* 🎨 Style Swap: Handed className={search.nearBtn} to this button */}
+        {/* Use My Current Location Button inside the search row frame */}
         <button
           className={search.nearBtn}
           onClick={handleNearMe}
           disabled={isLocating}
+          style={{
+            backgroundColor: '#4f46e5',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '25px',
+            padding: '12px 24px',
+            fontSize: '15px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+            whiteSpace: 'nowrap',
+            boxShadow: '0 2px 8px rgba(79, 70, 229, 0.25)'
+          }}
         >
           {isLocating ? '📍 Detecting...' : 'Use My Current Location'}
         </button>
       </div>
 
-      {/* 🎨 Style Swap: Handed className={search.searchBtn} to this button */}
+      {/* Search Your Pet's Room standalone clean button option */}
       <button
         className={search.searchBtn}
         onClick={() => navigate('/rooms')}
+        style={{
+          display: 'block',
+          margin: '0 auto 24px auto',
+          backgroundColor: '#10b981',
+          color: '#ffffff',
+          border: 'none',
+          borderRadius: '25px',
+          padding: '14px 36px',
+          fontSize: '16px',
+          fontWeight: '600',
+          cursor: 'pointer',
+          boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+          transition: 'transform 0.2s, background-color 0.2s'
+        }}
       >
         🔍 search your pet's room
       </button>
 
-      <div className={search.groomerWrap}>
+      <div className={search.groomerWrap} style={{ marginTop: '25px' }}>
         <button
           className={search.groomerBtn}
           onClick={() => navigate('/groomers')}
+          style={{
+            backgroundColor: 'transparent',
+            border: '2px stroke #e5e7eb',
+            color: '#4b5563',
+            fontSize: '14px',
+            fontWeight: '500',
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
         >
           ✂️ Book a groomer now — do grooming in your home
         </button>
