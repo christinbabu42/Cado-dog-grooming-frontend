@@ -225,9 +225,9 @@ const SearchBar = () => {
           placeholder="📍 Location"
         />
 
-        {/* 🔄 Position Swap: Location detection trigger button now lives in the search layout block */}
+        {/* 🎨 Style Swap: Handed className={search.nearBtn} to this button */}
         <button
-          className={search.searchBtn}
+          className={search.nearBtn}
           onClick={handleNearMe}
           disabled={isLocating}
         >
@@ -235,9 +235,9 @@ const SearchBar = () => {
         </button>
       </div>
 
-      {/* 🔄 Position Swap: Main search navigation trigger button now sits here styled as the secondary button */}
+      {/* 🎨 Style Swap: Handed className={search.searchBtn} to this button */}
       <button
-        className={search.nearBtn}
+        className={search.searchBtn}
         onClick={() => navigate('/rooms')}
       >
         🔍 search your pet's room
