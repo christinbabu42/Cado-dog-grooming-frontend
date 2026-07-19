@@ -225,20 +225,22 @@ const SearchBar = () => {
           placeholder="📍 Location"
         />
 
+        {/* 🔄 Position Swap: Location detection trigger button now lives in the search layout block */}
         <button
           className={search.searchBtn}
-          onClick={() => navigate('/rooms')}
+          onClick={handleNearMe}
+          disabled={isLocating}
         >
-          🔍 Search
+          {isLocating ? '📍 Detecting...' : 'Use My Current Location'}
         </button>
       </div>
 
+      {/* 🔄 Position Swap: Main search navigation trigger button now sits here styled as the secondary button */}
       <button
         className={search.nearBtn}
-        onClick={handleNearMe}
-        disabled={isLocating}
+        onClick={() => navigate('/rooms')}
       >
-        {isLocating ? '📍 Detecting...' : 'Use My Current Location'}
+        🔍 search your pet's room
       </button>
 
       <div className={search.groomerWrap}>
