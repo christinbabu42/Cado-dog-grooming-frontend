@@ -60,13 +60,28 @@
 .nearBtn {
   margin-top: 20px;
   padding: 10px 20px;
-  background: transparent;
-  background-color: #f2f2f2;
-  border: 1px solid #d9f714;
-  color: #000000;
+  background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+  border: 1px solid #AA771C;
+  color: #342301;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 25px; /* Optional: gives it sleek premium rounded corners matching the inline style */
+  box-shadow: 0 4px 15px rgba(187, 143, 44, 0.3);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nearBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(187, 143, 44, 0.5);
+}
+
+.nearBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(187, 143, 44, 0.3);
 }
 
 .groomerBtn {
