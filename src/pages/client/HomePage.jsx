@@ -88,21 +88,44 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       await fetch(
-        "https://your-backend-domain.com/auth/google/logout",
+        "https://cado-dog-grooming-backend.onrender.com/auth/google/logout",
         {
           method: "POST",
           credentials: "include",
         }
       );
 
-      localStorage.clear();
-      sessionStorage.clear();
+      localStorage.removeItem("user");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPhoto");
+      localStorage.removeItem("userCountry");
+      localStorage.removeItem("walletBalance");
+      localStorage.removeItem("staffProfile");
+      localStorage.removeItem("staffId");
+      localStorage.removeItem("staffUserId");
+      localStorage.removeItem("hostListingIds");
 
+      localStorage.setItem("justLoggedOut", "true");
       navigate("/login", { replace: true });
 
     } catch (error) {
       console.error("Logout error:", error);
+      
+      localStorage.removeItem("user");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPhoto");
+      localStorage.removeItem("userCountry");
+      localStorage.removeItem("walletBalance");
+      localStorage.removeItem("staffProfile");
+      localStorage.removeItem("staffId");
+      localStorage.removeItem("staffUserId");
+      localStorage.removeItem("hostListingIds");
 
+      localStorage.setItem("justLoggedOut", "true");
       navigate("/login", { replace: true });
     }
   };

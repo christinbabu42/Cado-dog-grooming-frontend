@@ -35,6 +35,12 @@ const LoginScreen = () => {
         // Remove token from URL if present to clean up the browser bar
         window.history.replaceState({}, document.title, "/login");
 
+        const justLoggedOut = localStorage.getItem("justLoggedOut");
+        if (justLoggedOut) {
+            localStorage.removeItem("justLoggedOut");
+            return;
+        }
+
         // ⭐ Fetch logged-in user's details using axios via HttpOnly Cookies
         axios.get("https://cado-dog-grooming-backend.onrender.com/api/user/me", {
             withCredentials: true
