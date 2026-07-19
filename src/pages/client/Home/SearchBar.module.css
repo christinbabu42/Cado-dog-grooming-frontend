@@ -85,29 +85,33 @@
   background: #AA771C;
 }
 
-/* ================= 3. FEATURED / HOME SERVICE BUTTON (Groomer) ================= */
+/* ================= FEATURED HOME SERVICE BUTTON (Groomer) ================= */
 .groomerBtn {
-  background: linear-gradient(135deg, #2C2518 0%, #4A3E29 100%); /* Elegant deep velvet-bronze */
-  color: #F5C542; /* Pops beautifully with premium warm gold text */
-  border: 1px solid #6E5C3D;
+  background: linear-gradient(135deg, #111111 0%, #222222 100%); /* Premium rich obsidian black */
+  color: #D4AF37; /* Distinctive formal gold text */
+  border: 2px solid #D4AF37; /* Clean, matching crisp gold border */
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   height: 1.5cm;
   padding: 0 28px;
   font-size: 15px;
-  box-shadow: 0 6px 16px rgba(44, 37, 24, 0.2);
-  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Hover State: Smoothly flips to a rich gold background with black text */
 .groomerBtn:hover {
-  background: linear-gradient(135deg, #3D3321 0%, #5C4D33 100%);
-  box-shadow: 0 10px 22px rgba(44, 37, 24, 0.35);
-  color: #ffffff; /* Turns clean white on hover */
+  background: linear-gradient(135deg, #D4AF37 0%, #AA771C 100%);
+  color: #111111; /* Sharp high-contrast black text on hover */
+  border-color: #AA771C;
+  box-shadow: 0 10px 24px rgba(212, 175, 55, 0.35);
   transform: translateY(-2px);
 }
 
+/* Active / Click State */
 .groomerBtn:active {
   transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(44, 37, 24, 0.2);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
 }
