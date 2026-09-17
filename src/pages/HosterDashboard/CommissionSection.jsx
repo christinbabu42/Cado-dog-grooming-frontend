@@ -28,8 +28,14 @@ const CommissionSection = ({ hostId, onViewBooking }) => {
     document.body.appendChild(script);
   }, []);
 
-  useEffect(() => {
-    if (!hostId) return;
+useEffect(() => {
+  console.log("💰 Commission hostId:", hostId);
+
+  if (!hostId) {
+    console.log("❌ Commission hostId is missing");
+    setLoading(false);
+    return;
+  }
 
     const fetchCommissionData = async () => {
       try {
