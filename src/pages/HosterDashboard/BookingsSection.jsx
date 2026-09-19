@@ -13,7 +13,7 @@ import {
   FaInfoCircle,
   FaReceipt
 } from "react-icons/fa";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import "./BookingsSection.css";
 
 const HostBookingsPage = () => {
@@ -21,32 +21,65 @@ const HostBookingsPage = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
 
-  const hostId = localStorage.getItem("userId");
+  // Fallback state if localStorage is empty
+  const [resolvedHostId, setResolvedHostId] = useState(localStorage.getItem("userId"));
+
+  console.log("🏠 BOOKINGS COMPONENT USER ID:", resolvedHostId);
 
   useEffect(() => {
-    if (!hostId) return;
-
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `https://cado-dog-grooming-backend.onrender.com/api/hostBookings/host/${hostId}`,
+        let currentHostId = resolvedHostId;
+
+        // If localStorage userId is missing, fetch the profile dynamically like the dashboard does
+        if (!currentHostId) {
+          console.log("⚠️ No userId in localStorage, fetching host profile...");
+          const profileRes = await axiosInstance.get("/api/hosts/profile", {
+            withCredentials: true
+          });
+          
+          if (profileRes.data && (profileRes.data._id || profileRes.data.host?._id)) {
+            currentHostId = profileRes.data._id || profileRes.data.host?._id;
+            localStorage.setItem("userId", currentHostId);
+            setResolvedHostId(currentHostId);
+          }
+        }
+
+        if (!currentHostId) {
+          console.log("❌ Could not resolve hostId");
+          return;
+        }
+
+        console.log("🏠 Fetching bookings for host:", currentHostId);
+
+        const res = await axiosInstance.get(
+          `/api/hostBookings/host/${currentHostId}`,
           {
             withCredentials: true
           }
         );
 
-        console.log("BOOKINGS RESPONSE:", res.data);
+        console.log("✅ BOOKINGS RESPONSE:", res.data);
 
         if (res.data.success) {
+          console.log(
+            "📦 BOOKINGS COUNT:",
+            res.data.bookings?.length || 0
+          );
+
           setBookings(res.data.bookings || []);
         }
       } catch (err) {
-        console.error("Booking Fetch Error:", err);
+        console.error(
+          "❌ Booking Fetch Error:",
+          err.response?.status,
+          err.response?.data || err.message
+        );
       }
     };
 
     fetchData();
-  }, [hostId]);
+  }, [resolvedHostId]);
 
   const handleViewBooking = (booking) => {
     setSelectedBooking(booking);
