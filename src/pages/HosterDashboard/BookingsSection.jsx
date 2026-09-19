@@ -29,11 +29,16 @@ const HostBookingsPage = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `https://cado-dog-grooming-backend.onrender.com/api/hostBookings/host/${hostId}`
+          `https://cado-dog-grooming-backend.onrender.com/api/hostBookings/host/${hostId}`,
+          {
+            withCredentials: true
+          }
         );
 
+        console.log("BOOKINGS RESPONSE:", res.data);
+
         if (res.data.success) {
-          setBookings(res.data.bookings);
+          setBookings(res.data.bookings || []);
         }
       } catch (err) {
         console.error("Booking Fetch Error:", err);
@@ -184,46 +189,43 @@ const HostBookingsPage = () => {
               <span className="value">{booking.mobile}</span>
             </div>
 
-            {/* --- STAY DETAILS --- */}
             {/* --- FINANCIAL DETAILS --- */}
-<div className="modal-section-label mt-4">
-  <FaReceipt className="mr-2"/> Pricing & Payment
-</div>
+            <div className="modal-section-label mt-4">
+              <FaReceipt className="mr-2"/> Pricing & Payment
+            </div>
 
-<div className="detail-row">
-  <span className="label">Payment Method:</span>
-  <span className="value" style={{ textTransform: 'capitalize' }}>
-    {booking.paymentMethod}
-  </span>
-</div>
+            <div className="detail-row">
+              <span className="label">Payment Method:</span>
+              <span className="value" style={{ textTransform: 'capitalize' }}>
+                {booking.paymentMethod}
+              </span>
+            </div>
 
-<div className="detail-row">
-  <span className="label">Payment Status:</span>
-  <span
-    className={`value status-pill ${booking.paymentStatus === "paid" ? "paid" : "unpaid"}`}
-    style={{ fontSize: '0.8rem' }}
-  >
-    {booking.paymentStatus}
-  </span>
-</div>
+            <div className="detail-row">
+              <span className="label">Payment Status:</span>
+              <span
+                className={`value status-pill ${booking.paymentStatus === "paid" ? "paid" : "unpaid"}`}
+                style={{ fontSize: '0.8rem' }}
+              >
+                {booking.paymentStatus}
+              </span>
+            </div>
 
-{/* ✅ NEW — PAYMENT ID */}
-<div className="detail-row">
-  <span className="label">Payment ID:</span>
-  <span
-    className="value"
-    style={{
-      color: booking.paymentId ? "#D4AF37" : "#9ca3af",
-      fontSize: "0.8rem",
-      wordBreak: "break-all",
-      fontWeight: "600"
-    }}
-  >
-    {booking.paymentId || "Not paid yet"}
-  </span>
-</div>
-
-
+            {/* ✅ PAYMENT ID */}
+            <div className="detail-row">
+              <span className="label">Payment ID:</span>
+              <span
+                className="value"
+                style={{
+                  color: booking.paymentId ? "#D4AF37" : "#9ca3af",
+                  fontSize: "0.8rem",
+                  wordBreak: "break-all",
+                  fontWeight: "600"
+                }}
+              >
+                {booking.paymentId || "Not paid yet"}
+              </span>
+            </div>
 
             <div className="detail-row">
               <span className="label">Room Name:</span>
